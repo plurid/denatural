@@ -1,5 +1,5 @@
 compute fibonacci // function name
-    number: naturalnumber // function parameters, one per line
+    number: integernumber // function parameters, one per line
 <
     if (number <= 1) deliver 1
 
@@ -8,7 +8,7 @@ compute fibonacci // function name
 
 
 
-compute fibonacci(number: naturalnumber) // function name with parameters, comma separatec
+compute fibonacci(number: integernumber) // function name with parameters, comma separatec
 <
     if (number <= 1) deliver 1
 
@@ -18,7 +18,7 @@ compute fibonacci(number: naturalnumber) // function name with parameters, comma
 
 
 compute fibonacci
-    number: naturalnumber
+    number: integernumber
     memoizated: any
 <
     memoizated = memoizated || {};
