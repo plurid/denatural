@@ -1,2 +1,2 @@
-# denatural language
+# denatural
 
