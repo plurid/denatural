@@ -1,7 +1,7 @@
-# denatural
+# denatural language
 
 
-denatural intends to be a loosely-towards-strongly typed [1], middle-level [2], inter-compiled[3] language
+denatural intends to be a loosely-towards-strongly typed [1], middle-level [2], inter-compiled [3] language
 
 
 [1] types are inferred, but can be specified for better compilation
