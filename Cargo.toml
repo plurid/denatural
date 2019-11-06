@@ -1,0 +1,11 @@
+[package]
+name = "denatural"
+version = "0.1.0"
+authors = ["Jan Cavel <caveljan@plurid.com>"]
+edition = "2018"
+
+[[bin]]
+name = "denatural"
+path = "source/binary/main.rs"
+
+[dependencies]
