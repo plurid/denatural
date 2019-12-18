@@ -1,0 +1,58 @@
+{
+    "name": "denatural-grammar",
+    "version": "0.0.1",
+    "displayName": "denatural",
+    "publisher": "plurid",
+    "icon": "assets/icon.png",
+    "galleryBanner": {
+        "color": "#1f2533",
+        "theme": "dark"
+    },
+    "description": "Syntax highlighting for the denatural programming language (.den and .denatural)",
+    "author": "Jan Cavel <caveljan@plurid.com> (https://plurid.com/)",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/plurid/denatural"
+    },
+    "license": "MIT",
+    "engines": {
+        "vscode": "^1.37.0"
+    },
+    "categories": [
+        "Programming Languages"
+    ],
+    "contributes": {
+        "languages": [
+            {
+                "id": "denatural",
+                "aliases": [
+                    "den",
+                    "denatural"
+                ],
+                "extensions": [
+                    ".den",
+                    ".denatural"
+                ],
+                "configuration": "./language-configuration.json"
+            }
+        ],
+        "grammars": [
+            {
+                "language": "denatural",
+                "scopeName": "source.plurid",
+                "path": "./syntaxes/denatural.tmLanguage.json",
+                "embeddedLanguages": {
+                    "meta.embedded.block.javascript": "source.js"
+                }
+            }
+        ]
+    },
+    "scripts": {
+        "yamlToJson": "js-yaml syntaxes/denatural.tmLanguage.yaml > syntaxes/denatural.tmLanguage.json",
+        "jsonToYaml": "js-yaml syntaxes/denatural.tmLanguage.json > syntaxes/denatural.tmLanguage.yaml",
+        "prepublishOnly": "yarn yamlToJson"
+    },
+    "dependencies": {
+        "js-yaml": "^3.13.1"
+    }
+}
