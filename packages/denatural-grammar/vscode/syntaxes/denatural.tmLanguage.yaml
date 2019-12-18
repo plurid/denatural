@@ -1,5 +1,5 @@
 $schema: 'https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json'
-name: pluridoc
+name: denatural
 patterns:
   - include: '#core'
 repository:
@@ -10,28 +10,6 @@ repository:
       - include: '#embedded-languages'
   keywords:
     patterns:
-      - name: keyword.control.pluridoc
-        match: '\b(id|title|location|processor|extradata)\b'
-  plane-dividers:
-    begin: '<<<'
-    end: '>>>'
-    beginCaptures:
-      0:
-        name: punctuation.paren.open
-    endCaptures:
-      0:
-        name: punctuation.paren.close
-    name: expression.group
-    patterns:
-      - include: '#expression'
-      - include: '#keywords'
-  embedded-languages:
-    patterns:
-      - include: '#el-javascript'
-  el-javascript:
-    begin: '^<<<.*(processor).*(javascript).*$'
-    end: '>>>'
-    captures:
-      0:
-        name: meta.embedded.block.javascript
+      - name: keyword.control.denatural
+        match: '\b(log)\b'
 scopeName: source.plurid
