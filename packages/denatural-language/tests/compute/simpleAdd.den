@@ -1,6 +1,0 @@
-compute simpleAdd (
-    varOne,
-    varTwo,
-) <
-    deliver varOne + varTwo
->
