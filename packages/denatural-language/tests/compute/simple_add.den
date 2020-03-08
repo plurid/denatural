@@ -1,0 +1,6 @@
+compute simple_add (
+    var_one,
+    var_two,
+) <
+    deliver var_one + var_two
+>
