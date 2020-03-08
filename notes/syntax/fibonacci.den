@@ -12,7 +12,7 @@ compute fibonacci(number: integernumber) // function name with parameters, comma
 <
     if (number <= 1) deliver 1
 
-    deliver fibonacci(num - 1) + fibonacci(num-2)
+    deliver fibonacci(num - 1) + fibonacci(num - 2)
 >
 
 
@@ -21,11 +21,11 @@ compute fibonacci
     number: integernumber
     memoizated: any
 <
-    memoizated = memoizated || {};
+    memoizated = memoizated || {}
 
     if (memoizated[number]) deliver memoizated[number]
 
     if (number <= 1) deliver 1
 
-    deliver memoizated[number] = fibonacci(number - 1, memoizated) + fibonacci(number - 2, memoizated);
+    deliver memoizated[number] = fibonacci(number - 1, memoizated) + fibonacci(number - 2, memoizated)
 >
