@@ -1,11 +1,11 @@
 CLI
 
-`den` or `denatural`
+`dn` or `denatural`
 
 
-> den filename.den
+> dn filename.dn
 > denatural filename.denatural
 
 
 // runpile (run&/compile) file given the context of the specified configuration file
-> den filename.den -c ./path/to/denatural.config.yaml
+> dn filename.dn -c ./path/to/denatural.config.yaml
