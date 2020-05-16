@@ -6,8 +6,9 @@ index from 1
 
 
 
-log every value of every variable into a file, specify the file in a denatural.config.yaml file
+log every value of every variable into a file, specify the file in a denatural.config.yaml file (Runtime Variable Emission). to have the log as pluridoc file
 
+https://en.wikipedia.org/wiki/Smalltalk#Image-based_persistence
 
 
 
