@@ -13,6 +13,10 @@ export default {
             sourcemap: true,
         },
     ],
+    external: [
+        'fs',
+        'readline',
+    ],
     watch: {
         include: 'source/**',
     },
