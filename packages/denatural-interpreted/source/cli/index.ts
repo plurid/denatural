@@ -1,10 +1,10 @@
-const main = async () => {
-    console.log('\n\tdenatural read-evaluate-print loop >>>\n');
-}
+import Denatural from '../objects/Denatural';
+
 
 
 const cli = () => {
-    main();
+    const denatural = new Denatural(process.argv);
+    denatural.main();
 }
 
 
