@@ -13,19 +13,12 @@ import {
 
 
 class Denatural {
-    private hadError = false;
-    private args: string[];
+    static hadError = false;
 
-
-    constructor(
+    static async main(
         args: string[],
     ) {
-        this.args = args;
-    }
-
-
-    async main() {
-        const length = this.args.length;
+        const length = args.length;
 
         if (length > 3) {
             console.log('\n\tUsage: denatural <source-file>\n');
@@ -33,14 +26,14 @@ class Denatural {
         }
 
         if (length === 3) {
-            await this.runFile(this.args[2]);
+            await this.runFile(args[2]);
             return;
         }
 
         this.runREPL();
     }
 
-    async runFile(
+    static async runFile(
         file: string,
     ) {
         try {
@@ -57,7 +50,7 @@ class Denatural {
         }
     }
 
-    runREPL() {
+    static runREPL() {
         console.log('\n\tdenatural read-evaluate-print loop >>>\n');
 
         let inputline = readline.createInterface({
@@ -81,7 +74,7 @@ class Denatural {
         recursiveAsyncReadLine();
     }
 
-    run(
+    static run(
         data: string,
     ) {
         const scanner = new Scanner(data);
@@ -92,21 +85,21 @@ class Denatural {
         }
     }
 
-    error(
+    static error(
         line: number,
         message: string,
     ) {
         this.report(line, '', message);
     }
 
-    report(
+    static report(
         line: number,
         where: string,
         message: string,
     ) {
         const log = '[line ' + line + '] Error' + where + ': ' + message;
-
         console.log(log);
+
         this.hadError = true;
     }
 }
