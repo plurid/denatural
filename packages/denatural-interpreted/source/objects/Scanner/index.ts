@@ -13,12 +13,32 @@ class Scanner {
     private start: number = 0;
     private current: number = 0;
     private line: number = 1;
+    private keywords: Record<string, TokenType>;
 
     constructor(
         source: string,
     ) {
         this.source = source;
         this.tokens = [];
+
+        this.keywords = {
+            and: TokenType.AND,
+            class: TokenType.CLASS,
+            else: TokenType.ELSE,
+            false: TokenType.FALSE,
+            for: TokenType.FOR,
+            fun: TokenType.FUN,
+            if: TokenType.IF,
+            nil: TokenType.NIL,
+            or: TokenType.OR,
+            print: TokenType.PRINT,
+            return: TokenType.RETURN,
+            super: TokenType.SUPER,
+            this: TokenType.THIS,
+            true: TokenType.TRUE,
+            var: TokenType.VAR,
+            while: TokenType.WHILE,
+        }
     }
 
     public scanTokens() {
@@ -115,10 +135,25 @@ class Scanner {
                 this.line++;
                 break;
 
+            case '"':
+                this.string();
+                break;
 
-            // default:
-            //     Denatural.error(this.line, 'Unexpected character.');
-            //     break;
+            case 'o':
+                if (this.peek() == 'r') {
+                    this.addToken(TokenType.OR);
+                }
+                break;
+
+            default:
+                if (this.isDigit(character)) {
+                    this.number();
+                }  else if (this.isAlpha(character)) {
+                    this.identifier();
+                } else {
+                    // Denatural.error(this.line, 'Unexpected character.');
+                }
+                break;
         }
     }
 
@@ -137,6 +172,11 @@ class Scanner {
         const newToken = new Token(type, text, literal, this.line);
 
         this.tokens.push(newToken);
+    }
+
+    private advance() {
+        this.current += 1;
+        return this.source.charAt(this.current - 1);
     }
 
     private match(
@@ -162,9 +202,88 @@ class Scanner {
         return this.source.charAt(this.current);
     }
 
-    private advance() {
-        this.current += 1;
-        return this.source.charAt(this.current - 1);
+    private string() {
+        while (this.peek() != '"' && !this.isAtEnd()) {
+            if (this.peek() == '\n') {
+                this.line += 1;
+            }
+
+            this.advance();
+        }
+
+        // Unterminated string.
+        if (this.isAtEnd()) {
+            // Denatural.error(this.line, 'Unterminated string.');
+            return;
+        }
+
+        const value = this.source.substring(this.start + 1, this.current);
+        this.addTokenLiteral(TokenType.STRING, value);
+    }
+
+    private isDigit(
+        character: string,
+    ) {
+        return character >= '0' && character <= '9';
+    }
+
+    private number(
+    ) {
+        while (this.isDigit(this.peek())) {
+            this.advance();
+        }
+
+        // Look for a fractional part.
+        if (this.peek() === '.' && this.isDigit(this.peekNext())) {
+        // Consume the "."
+        this.advance();
+
+        while (this.isDigit(this.peek())) {
+            this.advance();
+        }
+      }
+
+        this.addTokenLiteral(
+            TokenType.NUMBER, parseFloat(this.source.substring(this.start, this.current))
+        );
+    }
+
+    private peekNext() {
+        if (this.current + 1 >= this.source.length) {
+            return '\0';
+        }
+
+        return this.source.charAt(this.current + 1);
+    }
+
+    private isAlpha(
+        c: string,
+    ) {
+        return (c >= 'a' && c <= 'z')
+            || (c >= 'A' && c <= 'Z')
+            || c === '_';
+    }
+
+    private isAlphaNumeric(
+        c: string,
+    ) {
+        return this.isAlpha(c) || this.isDigit(c);
+    }
+
+    private identifier() {
+        while (this.isAlphaNumeric(this.peek())) {
+            this.advance();
+        }
+
+        // See if the identifier is a reserved word.
+        const text = this.source.substring(this.start, this.current);
+        let type = this.keywords[text];
+
+        if (!type) {
+            type = TokenType.IDENTIFIER;
+        }
+
+        this.addToken(type);
     }
 
     private isAtEnd() {
