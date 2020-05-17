@@ -1,0 +1,24 @@
+# dependencies
+node_modules
+
+# builds
+build
+distribution
+coverage
+documentation
+compiled
+.rpt2_cache
+.awcache
+
+# misc
+.DS_Store
+.env
+.nyc_output
+.DS_Store
+*.log
+.vscode
+.idea
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

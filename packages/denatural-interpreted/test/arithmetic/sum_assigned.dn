@@ -1,0 +1,3 @@
+let sum = 5 + 7
+
+log: sum

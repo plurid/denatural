@@ -1,0 +1,5 @@
+#!/usr/bin/env node
+
+const denatural = require('../distribution/index.js');
+
+denatural.cli();
