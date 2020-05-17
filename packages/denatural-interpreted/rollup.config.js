@@ -15,6 +15,7 @@ export default {
     ],
     external: [
         'fs',
+        'path',
         'readline',
     ],
     watch: {
