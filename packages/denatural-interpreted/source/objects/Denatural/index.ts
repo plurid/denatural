@@ -1,8 +1,8 @@
 import * as readline from 'readline';
-
 import {
     promises as fs,
 } from 'fs';
+import path from 'path';
 
 import Scanner from '../Scanner';
 
@@ -44,7 +44,8 @@ class Denatural {
         file: string,
     ) {
         try {
-            const data = await fs.readFile(file, 'utf-8');
+            const filepath = path.join(process.cwd(), file);
+            const data = await fs.readFile(filepath, 'utf-8');
 
             this.run(data);
 
