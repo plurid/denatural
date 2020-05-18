@@ -170,10 +170,10 @@ ${textParanthesizeParameters.join('\n')}
                 textMethods.push(textExpression);
             }
         }
-
     }
 
     const textASTPrinter = `
+
 export class ASTPrinter implements Visitor<string> {
     public print(
         expresssion: Expression,
