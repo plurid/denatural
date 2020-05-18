@@ -4,6 +4,7 @@ import {
 } from 'fs';
 import path from 'path';
 
+/** circular dependency fixable when Denatural and Scanner are in the same file */
 import Scanner from '../Scanner';
 
 import {
