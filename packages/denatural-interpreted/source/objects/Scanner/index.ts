@@ -3,7 +3,7 @@ import {
 } from '../../data/enumerations';
 
 import Token from '../Token';
-// import Denatural from '../Denatural';
+import Denatural from '../Denatural';
 
 
 
@@ -139,19 +139,13 @@ class Scanner {
                 this.string();
                 break;
 
-            case 'o':
-                if (this.peek() == 'r') {
-                    this.addToken(TokenType.OR);
-                }
-                break;
-
             default:
                 if (this.isDigit(character)) {
                     this.number();
-                }  else if (this.isAlpha(character)) {
+                } else if (this.isAlpha(character)) {
                     this.identifier();
                 } else {
-                    // Denatural.error(this.line, 'Unexpected character.');
+                    Denatural.error(this.line, 'Unexpected character.');
                 }
                 break;
         }
@@ -213,7 +207,7 @@ class Scanner {
 
         // Unterminated string.
         if (this.isAtEnd()) {
-            // Denatural.error(this.line, 'Unterminated string.');
+            Denatural.error(this.line, 'Unterminated string.');
             return;
         }
 
@@ -227,8 +221,7 @@ class Scanner {
         return character >= '0' && character <= '9';
     }
 
-    private number(
-    ) {
+    private number() {
         while (this.isDigit(this.peek())) {
             this.advance();
         }

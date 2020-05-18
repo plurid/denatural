@@ -97,8 +97,8 @@ class Denatural {
         where: string,
         message: string,
     ) {
-        const log = '[line ' + line + '] Error' + where + ': ' + message;
-        console.log(log);
+        const value = '[line ' + line + '] Error' + where + ': ' + message;
+        console.log(value);
 
         this.hadError = true;
     }
