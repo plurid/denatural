@@ -5,6 +5,10 @@ const path = require('path');
 
 
 
+// constants
+const SPACE = '    ';
+
+
 // expressions types
 const expressions = [
     ['Binary', 'left: Expression', 'operator: Token', 'right: Expression'],
@@ -44,7 +48,7 @@ function generateTextVisitor(
 
     for (const expression of expressions) {
         const name = expression[0];
-        const textExpression = `\tvisit${name}Expression: (${name.toLowerCase()}Expression: ${name}Expression) => T;`;
+        const textExpression = `${SPACE}visit${name}Expression: (${name.toLowerCase()}Expression: ${name}Expression) => T;`;
         textMethods.push(textExpression);
     }
 
@@ -67,9 +71,9 @@ function generateTextExpressions(
         const name = expression[0];
         const parameters = expression.slice(1);
 
-        const textPublic = parameters.map(parameter => `\tpublic ${parameter};`);
-        const textConstructor = parameters.map(parameter => `\t\tpublic ${parameter},`);
-        const textParameters = parameters.map(parameter => `\t\tthis.${parameter} = ${parameter.split(':')[0]};`);
+        const textPublic = parameters.map(parameter => `${SPACE}public ${parameter};`);
+        const textConstructor = parameters.map(parameter => `${SPACE}${SPACE}${parameter},`);
+        const textParameters = parameters.map(parameter => `${SPACE}${SPACE}this.${parameter.split(':')[0]} = ${parameter.split(':')[0]};`);
 
         const textClass = `
 export class ${name}Expression extends Expression {
@@ -141,10 +145,10 @@ function generateTextASTPrinter(
             default: {
                 const lowerCaseName = name.toLowerCase();
                 const textLeftExpression = expression.find(expression => expression.includes('left'))
-                    ? `\t\t\t${lowerCaseName}Expression.left,`
+                    ? `${SPACE}${SPACE}${SPACE}${lowerCaseName}Expression.left,`
                     : '';
                 const textRightExpression = expression.find(expression => expression.includes('right'))
-                    ? `\t\t\t${lowerCaseName}Expression.right,`
+                    ? `${SPACE}${SPACE}${SPACE}${lowerCaseName}Expression.right,`
                     : '';
                 const textParanthesizeParameters = [
                     textLeftExpression,
