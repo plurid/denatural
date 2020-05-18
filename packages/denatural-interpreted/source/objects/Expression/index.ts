@@ -164,6 +164,6 @@ export class ASTPrinter implements Visitor<string> {
 
         builder.push(')');
 
-        return builder.join(' ');
+        return builder.join('');
     }
 }
