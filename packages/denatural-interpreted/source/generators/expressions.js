@@ -21,6 +21,7 @@ const expressions = [
 // static texts
 const textImports = `import Token from '../Token';
 
+
 `;
 
 
@@ -56,6 +57,7 @@ function generateTextVisitor(
 export interface Visitor<T> {
 ${textMethods.join('\n')}
 }
+
 `;
 
     return textVisitor;
@@ -178,7 +180,6 @@ export class ASTPrinter implements Visitor<string> {
     ) {
         return expresssion.accept(this);
     }
-
 ${textMethods.join('')}
 
     private parenthesize(
