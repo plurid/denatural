@@ -5,10 +5,10 @@ import {
 
 
 class Token {
-    private type: TokenType;
-    private lexeme: string;
-    private literal: any;
-    private line: number;
+    public type: TokenType;
+    public lexeme: string;
+    public literal: any;
+    public line: number;
 
     constructor(
         type: TokenType,
