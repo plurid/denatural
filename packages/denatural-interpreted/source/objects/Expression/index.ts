@@ -2,7 +2,7 @@ import Token from '../Token';
 
 
 
-abstract class Expression {
+export abstract class Expression {
     abstract accept<T>(
         visitor: Visitor<T>,
     ): T;
