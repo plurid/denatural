@@ -6,10 +6,17 @@ import path from 'path';
 
 /** circular dependency fixable when Denatural and Scanner are in the same file */
 import Scanner from '../Scanner';
+import Token from '../Token';
+import Parser from '../Parser';
+import * as Expression from '../Expression';
 
 import {
     EXIT_CODE_ERROR,
 } from '../../data/constants';
+
+import {
+    TokenType,
+} from '../../data/enumerations';
 
 
 
@@ -80,17 +87,35 @@ class Denatural {
     ) {
         const scanner = new Scanner(data);
         const tokens = scanner.scanTokens();
+        const parser = new Parser(tokens);
+        const expression = parser.parse();
 
-        for (const token of tokens) {
-            console.log(token);
+        if (this.hadError) {
+            return;
         }
+
+        if (!expression) {
+            return;
+        }
+        console.log(new Expression.ASTPrinter().print(expression));
     }
 
     static error(
-        line: number,
+        entity: number | Token,
         message: string,
     ) {
-        this.report(line, '', message);
+        if (typeof entity === 'number') {
+            // entity is a line number
+            this.report(entity, '', message);
+            return;
+        }
+
+        // entity is a Token
+        if (entity.type === TokenType.EOF) {
+            this.report(entity.line, ' at end', message);
+        } else {
+            this.report(entity.line, " at '" + entity.lexeme + "'", message);
+        }
     }
 
     static report(

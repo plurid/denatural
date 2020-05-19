@@ -26,7 +26,7 @@ const textImports = `import Token from '../Token';
 
 
 const textTop = `
-abstract class Expression {
+export abstract class Expression {
     abstract accept<T>(
         visitor: Visitor<T>,
     ): T;
