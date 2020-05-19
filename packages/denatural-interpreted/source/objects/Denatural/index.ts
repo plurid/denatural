@@ -7,11 +7,16 @@ import path from 'path';
 /** circular dependency fixable when Denatural and Scanner are in the same file */
 import Scanner from '../Scanner';
 import Token from '../Token';
-import Parser from '../Parser';
 import * as Expression from '../Expression';
+import Parser from '../Parser';
+import Interpreter from '../Interpreter';
+import {
+    RuntimeError,
+} from '../Errors';
 
 import {
     EXIT_CODE_ERROR,
+    EXIT_CODE_RUNTIME_ERROR,
 } from '../../data/constants';
 
 import {
@@ -21,7 +26,9 @@ import {
 
 
 class Denatural {
+    static interpreter: Interpreter = new Interpreter();
     static hadError = false;
+    static hadRuntimeError = false;
 
     static async main(
         args: string[],
@@ -52,6 +59,10 @@ class Denatural {
 
             if (this.hadError) {
                 process.exit(EXIT_CODE_ERROR);
+            }
+
+            if (this.hadRuntimeError) {
+                process.exit(EXIT_CODE_RUNTIME_ERROR);
             }
         } catch (error) {
             console.log(`Error reading file: ${file}`);
@@ -97,7 +108,8 @@ class Denatural {
         if (!expression) {
             return;
         }
-        console.log(new Expression.ASTPrinter().print(expression));
+
+        this.interpreter.interpret(expression);
     }
 
     static error(
@@ -116,6 +128,15 @@ class Denatural {
         } else {
             this.report(entity.line, " at '" + entity.lexeme + "'", message);
         }
+    }
+
+    static runtimeError(
+        error: RuntimeError,
+    ) {
+        console.log(
+            error.message + '\n[line ' + error.token.line + ']'
+        );
+        this.hadRuntimeError = true;
     }
 
     static report(
