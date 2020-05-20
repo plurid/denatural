@@ -1,6 +1,7 @@
 import Denatural from '../Denatural';
 import Token from '../Token';
 import * as Expression from '../Expression';
+import * as Statement from '../Statement';
 
 import {
     TokenType,
@@ -21,11 +22,33 @@ class Parser {
 
 
     public parse() {
-        try {
-            return this.expression();
-        } catch (error) {
-            return null;
+        const statements = [];
+
+        while (!this.isAtEnd()) {
+            statements.push(this.statement());
         }
+
+        return statements;
+    }
+
+    public statement() {
+        if (this.match(TokenType.PRINT)) {
+            return this.printStatement();
+        }
+
+        return this.expressionStatement();
+    }
+
+    public printStatement() {
+        const value = this.expression();
+        this.consume(TokenType.SEMICOLON, "Expect ';' after value.");
+        return new Statement.PrintStatement(value);
+    }
+
+    public expressionStatement() {
+        const expression = this.expression();
+        this.consume(TokenType.SEMICOLON, "Expect ';' after expression.");
+        return new Statement.ExpressionStatement(expression);
     }
 
     public expression() {
