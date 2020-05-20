@@ -22,7 +22,7 @@ class Parser {
 
 
     public parse() {
-        const statements = [];
+        const statements: any[] = [];
 
         while (!this.isAtEnd()) {
             statements.push(this.statement());
@@ -165,7 +165,7 @@ class Parser {
         message: string,
     ) {
         if (this.check(type)) {
-            return this.advance;
+            return this.advance();
         }
 
         throw this.error(this.peek(), message);
