@@ -17,6 +17,7 @@ export interface Visitor<T> {
     visitExpressionStatement: (expressionStatement: ExpressionStatement) => T;
     visitPrintStatement: (printStatement: PrintStatement) => T;
     visitVariableStatement: (variableStatement: VariableStatement) => T;
+    visitBlockStatement: (blockStatement: BlockStatement) => T;
 }
 
 
@@ -76,5 +77,24 @@ export class VariableStatement extends Statement {
         visitor: Visitor<T>,
     ) {
         return visitor.visitVariableStatement(this);
+    }
+}
+
+
+export class BlockStatement extends Statement {
+    public statements: Statement[];
+
+    constructor(
+        statements: Statement[],
+    ) {
+        super();
+
+        this.statements = statements;
+    }
+
+    accept<T>(
+        visitor: Visitor<T>,
+    ) {
+        return visitor.visitBlockStatement(this);
     }
 }
