@@ -60,11 +60,11 @@ export class PrintStatement extends Statement {
 
 export class VariableStatement extends Statement {
     public name: Token;
-    public initializer: Expression;
+    public initializer: Expression | null;
 
     constructor(
         name: Token,
-        initializer: Expression,
+        initializer: Expression | null,
     ) {
         super();
 
