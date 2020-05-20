@@ -63,6 +63,12 @@ class Parser {
 
     public statement() {
         if (
+            this.match(TokenType.IF)
+        ) {
+            return this.ifStatement();
+        }
+
+        if (
             this.match(TokenType.PRINT)
         ) {
             return this.printStatement();
@@ -75,6 +81,22 @@ class Parser {
         }
 
         return this.expressionStatement();
+    }
+
+    public ifStatement(): any {
+        this.consume(TokenType.LEFT_PAREN, "Expect '(' after 'if'.");
+        const condition = this.expression();
+        this.consume(TokenType.RIGHT_PAREN, "Expect ')' after if condition.");
+
+        const thenBranch = this.statement();
+        let elseBranch = null;
+        if (
+            this.match(TokenType.ELSE)
+        ) {
+            elseBranch = this.statement();
+        }
+
+        return new Statement.IfStatement(condition, thenBranch, elseBranch);
     }
 
     public printStatement() {

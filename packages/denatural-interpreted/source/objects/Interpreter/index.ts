@@ -44,6 +44,20 @@ class Interpreter implements Expression.Visitor<any>, Statement.Visitor<any> {
         return null;
     }
 
+    public visitIfStatement(
+        statement: Statement.IfStatement,
+    ) {
+        if (
+            this.isTruthy(this.evaluate(statement.condition))
+        ) {
+            this.execute(statement.thenBranch);
+        } else if (statement.elseBranch !== null) {
+            this.execute(statement.elseBranch);
+        }
+
+        return null;
+    }
+
     public visitPrintStatement(
         statement: Statement.PrintStatement,
     ) {
