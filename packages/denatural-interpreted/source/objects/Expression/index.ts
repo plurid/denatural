@@ -10,11 +10,34 @@ export abstract class Expression {
 
 
 export interface Visitor<T> {
+    visitAssignExpression: (assignExpression: AssignExpression) => T;
     visitBinaryExpression: (binaryExpression: BinaryExpression) => T;
     visitGroupingExpression: (groupingExpression: GroupingExpression) => T;
     visitLiteralExpression: (literalExpression: LiteralExpression) => T;
     visitUnaryExpression: (unaryExpression: UnaryExpression) => T;
     visitVariableExpression: (variableExpression: VariableExpression) => T;
+}
+
+
+export class AssignExpression extends Expression {
+    public name: Token;
+    public value: Expression;
+
+    constructor(
+        name: Token,
+        value: Expression,
+    ) {
+        super();
+
+        this.name = name;
+        this.value = value;
+    }
+
+    accept<T>(
+        visitor: Visitor<T>,
+    ) {
+        return visitor.visitAssignExpression(this);
+    }
 }
 
 
@@ -127,6 +150,12 @@ export class ASTPrinter implements Visitor<string> {
         expresssion: Expression,
     ) {
         return expresssion.accept(this);
+    }
+
+    public visitAssignExpression(
+        assignExpression: AssignExpression,
+    ) {
+        return assignExpression.name.toString();
     }
 
     public visitBinaryExpression(
