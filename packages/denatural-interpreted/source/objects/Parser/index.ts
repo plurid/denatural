@@ -63,6 +63,12 @@ class Parser {
 
     public statement() {
         if (
+            this.match(TokenType.FOR)
+        ) {
+            return this.forStatement();
+        }
+
+        if (
             this.match(TokenType.IF)
         ) {
             return this.ifStatement();
@@ -87,6 +93,67 @@ class Parser {
         }
 
         return this.expressionStatement();
+    }
+
+    public forStatement(): any {
+        this.consume(TokenType.LEFT_PAREN, "Expect '(' after 'for'.");
+
+        let initializer;
+        if (
+            this.match(TokenType.SEMICOLON)
+        ) {
+            initializer = null;
+        } else if (
+            this.match(TokenType.VAR)
+        ) {
+            initializer = this.variableDeclaration();
+        } else {
+            initializer = this.expressionStatement();
+        }
+
+        let condition = null;
+        if (
+            !this.check(TokenType.SEMICOLON)
+        ) {
+            condition = this.expression();
+        }
+        this.consume(TokenType.SEMICOLON, "Expect ';' after loop condition.");
+
+        let increment = null;
+        if (
+            !this.check(TokenType.RIGHT_PAREN)
+        ) {
+            increment = this.expression();
+        }
+        this.consume(TokenType.SEMICOLON, "Expect ')' after for clauses.");
+
+        let body = this.statement();
+
+        if (increment !== null) {
+            body = new Statement.BlockStatement(
+                [
+                    body,
+                    new Statement.ExpressionStatement(increment)
+                ],
+            );
+        }
+
+        if (condition === null) {
+            condition = new Expression.LiteralExpression(true);
+        }
+
+        body = new Statement.WhileStatement(condition, body);
+
+        if (initializer !== null) {
+            body = new Statement.BlockStatement(
+                [
+                    initializer,
+                    body,
+                ],
+            );
+        }
+
+        return body;
     }
 
     public ifStatement(): Statement.IfStatement {
