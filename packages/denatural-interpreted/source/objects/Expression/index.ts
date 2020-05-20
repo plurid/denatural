@@ -14,6 +14,7 @@ export interface Visitor<T> {
     visitBinaryExpression: (binaryExpression: BinaryExpression) => T;
     visitGroupingExpression: (groupingExpression: GroupingExpression) => T;
     visitLiteralExpression: (literalExpression: LiteralExpression) => T;
+    visitLogicalExpression: (logicalExpression: LogicalExpression) => T;
     visitUnaryExpression: (unaryExpression: UnaryExpression) => T;
     visitVariableExpression: (variableExpression: VariableExpression) => T;
 }
@@ -104,6 +105,31 @@ export class LiteralExpression extends Expression {
 }
 
 
+export class LogicalExpression extends Expression {
+    public left: Expression;
+    public operator: Token;
+    public right: Expression;
+
+    constructor(
+        left: Expression,
+        operator: Token,
+        right: Expression,
+    ) {
+        super();
+
+        this.left = left;
+        this.operator = operator;
+        this.right = right;
+    }
+
+    accept<T>(
+        visitor: Visitor<T>,
+    ) {
+        return visitor.visitLogicalExpression(this);
+    }
+}
+
+
 export class UnaryExpression extends Expression {
     public operator: Token;
     public right: Expression;
@@ -185,6 +211,16 @@ export class ASTPrinter implements Visitor<string> {
         }
 
         return literalExpression.value.toString();
+    }
+
+    public visitLogicalExpression(
+        logicalExpression: LogicalExpression,
+    ) {
+        return this.parenthesize(
+            logicalExpression.operator.lexeme,
+            logicalExpression.left,
+            logicalExpression.right,
+        );
     }
 
     public visitUnaryExpression(
