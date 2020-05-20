@@ -11,6 +11,7 @@ const SPACE = '    ';
 
 // expressions types
 const expressions = [
+    ['Assign', 'name: Token', 'value: Expression'],
     ['Binary', 'left: Expression', 'operator: Token', 'right: Expression'],
     ['Grouping', 'expression: Expression'],
     ['Literal', 'value: any'],
