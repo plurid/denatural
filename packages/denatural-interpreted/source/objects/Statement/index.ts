@@ -65,12 +65,12 @@ export class ExpressionStatement extends Statement {
 export class IfStatement extends Statement {
     public condition: Expression;
     public thenBranch: Statement;
-    public elseBranch: Statement;
+    public elseBranch: Statement | null;
 
     constructor(
         condition: Expression,
         thenBranch: Statement,
-        elseBranch: Statement,
+        elseBranch: Statement | null,
     ) {
         super();
 

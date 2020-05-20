@@ -75,6 +75,12 @@ class Parser {
         }
 
         if (
+            this.match(TokenType.WHILE)
+        ) {
+            return this.whileStatement();
+        }
+
+        if (
             this.match(TokenType.LEFT_BRACE)
         ) {
             return new Statement.BlockStatement(this.block());
@@ -83,7 +89,7 @@ class Parser {
         return this.expressionStatement();
     }
 
-    public ifStatement(): any {
+    public ifStatement(): Statement.IfStatement {
         this.consume(TokenType.LEFT_PAREN, "Expect '(' after 'if'.");
         const condition = this.expression();
         this.consume(TokenType.RIGHT_PAREN, "Expect ')' after if condition.");
@@ -99,10 +105,19 @@ class Parser {
         return new Statement.IfStatement(condition, thenBranch, elseBranch);
     }
 
-    public printStatement() {
+    public printStatement(): Statement.PrintStatement {
         const value = this.expression();
         this.consume(TokenType.SEMICOLON, "Expect ';' after value.");
         return new Statement.PrintStatement(value);
+    }
+
+    public whileStatement(): Statement.WhileStatement {
+        this.consume(TokenType.LEFT_PAREN, "Expect '(' after 'while'.");
+        const condition = this.expression();
+        this.consume(TokenType.RIGHT_PAREN, "Expect ')' after condition.");
+        const body = this.statement();
+
+        return new Statement.WhileStatement(condition, body);
     }
 
     public expressionStatement() {
