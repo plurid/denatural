@@ -1,3 +1,5 @@
+import Token from '../Token';
+
 import {
     Expression,
 } from '../Expression';
@@ -14,6 +16,7 @@ export abstract class Statement {
 export interface Visitor<T> {
     visitExpressionStatement: (expressionStatement: ExpressionStatement) => T;
     visitPrintStatement: (printStatement: PrintStatement) => T;
+    visitVariableStatement: (variableStatement: VariableStatement) => T;
 }
 
 
@@ -51,5 +54,27 @@ export class PrintStatement extends Statement {
         visitor: Visitor<T>,
     ) {
         return visitor.visitPrintStatement(this);
+    }
+}
+
+
+export class VariableStatement extends Statement {
+    public name: Token;
+    public initializer: Expression;
+
+    constructor(
+        name: Token,
+        initializer: Expression,
+    ) {
+        super();
+
+        this.name = name;
+        this.initializer = initializer;
+    }
+
+    accept<T>(
+        visitor: Visitor<T>,
+    ) {
+        return visitor.visitVariableStatement(this);
     }
 }
