@@ -25,10 +25,40 @@ class Parser {
         const statements: any[] = [];
 
         while (!this.isAtEnd()) {
-            statements.push(this.statement());
+            statements.push(this.declaration());
         }
 
         return statements;
+    }
+
+    public declaration() {
+        try {
+            if (
+                this.match(TokenType.VAR)
+            ) {
+                return this.variableDeclaration();
+            }
+
+            return this.statement();
+        } catch (error) {
+            this.synchronize();
+            return null;
+        }
+    }
+
+    public variableDeclaration() {
+        const name = this.consume(TokenType.IDENTIFIER, 'Expect variable name.');
+
+        let initializer = null;
+        if (
+            this.match(TokenType.EQUAL)
+        ) {
+            initializer = this.expression();
+        }
+
+        this.consume(TokenType.SEMICOLON, "Expect ';' after variable declaration.");
+
+        return new Statement.VariableStatement(name, initializer);
     }
 
     public statement() {
@@ -146,6 +176,12 @@ class Parser {
             this.match(TokenType.NUMBER, TokenType.STRING)
         ) {
             return new Expression.LiteralExpression(this.previous().literal);
+        }
+
+        if (
+            this.match(TokenType.IDENTIFIER)
+        ) {
+            return new Expression.VariableExpression(this.previous());
         }
 
         if (

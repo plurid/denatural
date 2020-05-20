@@ -105,16 +105,13 @@ export class UnaryExpression extends Expression {
 
 export class VariableExpression extends Expression {
     public name: Token;
-    public initializer: Expression;
 
     constructor(
         name: Token,
-        initializer: Expression,
     ) {
         super();
 
         this.name = name;
-        this.initializer = initializer;
     }
 
     accept<T>(
