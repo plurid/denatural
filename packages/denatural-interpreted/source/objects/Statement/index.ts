@@ -14,11 +14,32 @@ export abstract class Statement {
 
 
 export interface Visitor<T> {
+    visitBlockStatement: (blockStatement: BlockStatement) => T;
     visitExpressionStatement: (expressionStatement: ExpressionStatement) => T;
     visitIfStatement: (ifStatement: IfStatement) => T;
     visitPrintStatement: (printStatement: PrintStatement) => T;
     visitVariableStatement: (variableStatement: VariableStatement) => T;
-    visitBlockStatement: (blockStatement: BlockStatement) => T;
+    visitWhileStatement: (whileStatement: WhileStatement) => T;
+}
+
+
+
+export class BlockStatement extends Statement {
+    public statements: Statement[];
+
+    constructor(
+        statements: Statement[],
+    ) {
+        super();
+
+        this.statements = statements;
+    }
+
+    accept<T>(
+        visitor: Visitor<T>,
+    ) {
+        return visitor.visitBlockStatement(this);
+    }
 }
 
 
@@ -107,20 +128,23 @@ export class VariableStatement extends Statement {
 }
 
 
-export class BlockStatement extends Statement {
-    public statements: Statement[];
+export class WhileStatement extends Statement {
+    public condition: Expression;
+    public body: Statement;
 
     constructor(
-        statements: Statement[],
+        condition: Expression,
+        body: Statement,
     ) {
         super();
 
-        this.statements = statements;
+        this.condition = condition;
+        this.body = body;
     }
 
     accept<T>(
         visitor: Visitor<T>,
     ) {
-        return visitor.visitBlockStatement(this);
+        return visitor.visitWhileStatement(this);
     }
 }
