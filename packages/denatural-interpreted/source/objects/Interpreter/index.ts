@@ -66,6 +66,17 @@ class Interpreter implements Expression.Visitor<any>, Statement.Visitor<any> {
         return null;
     }
 
+    public visitBlockStatement(
+        statement: Statement.BlockStatement,
+    ) {
+        this.executeBlock(
+            statement.statements,
+            new Environment(this.environment),
+        );
+
+        return null;
+    }
+
 
 
     /** EXPRESSIONS */
@@ -248,6 +259,26 @@ class Interpreter implements Expression.Visitor<any>, Statement.Visitor<any> {
         }
 
         return object.toString();
+    }
+
+    private executeBlock(
+        statements: Statement.Statement[],
+        environment: Environment,
+    ) {
+        const previous = this.environment;
+
+        try {
+            this.environment = environment;
+
+            for (const statement of statements) {
+                this.execute(statement);
+            }
+        } catch (error) {
+            this.environment = previous;
+            return;
+        } finally {
+            this.environment = previous;
+        }
     }
 }
 
