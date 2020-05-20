@@ -62,8 +62,16 @@ class Parser {
     }
 
     public statement() {
-        if (this.match(TokenType.PRINT)) {
+        if (
+            this.match(TokenType.PRINT)
+        ) {
             return this.printStatement();
+        }
+
+        if (
+            this.match(TokenType.LEFT_BRACE)
+        ) {
+            return new Statement.BlockStatement(this.block());
         }
 
         return this.expressionStatement();
@@ -85,6 +93,20 @@ class Parser {
         return this.assignment();
     }
 
+
+    public block() {
+        const statements: any[] = [];
+
+        while (
+            !this.check(TokenType.RIGHT_BRACE) && !this.isAtEnd()
+        ) {
+            statements.push(this.declaration());
+        }
+
+        this.consume(TokenType.RIGHT_BRACE, "Expect '}' after block.");
+
+        return statements;
+    }
 
     public assignment(): any {
         const expression = this.equality();
