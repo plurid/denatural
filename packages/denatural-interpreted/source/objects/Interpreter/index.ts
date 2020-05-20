@@ -4,6 +4,7 @@ import {
 
 import Denatural from '../Denatural';
 import * as Expression from '../Expression';
+import * as Statement from '../Statement';
 import Token from '../Token';
 import {
     RuntimeError,
@@ -11,18 +12,46 @@ import {
 
 
 
-class Interpreter implements Expression.Visitor<any> {
-    interpret(
-        expression: Expression.Expression,
+class Interpreter implements Expression.Visitor<any>, Statement.Visitor<any> {
+    public interpret(
+        statements: Statement.Statement[],
     ) {
         try {
-            const value = this.evaluate(expression);
-            console.log(this.stringify(value));
+            for (const statement of statements) {
+                this.execute(statement);
+            }
         } catch (error) {
             Denatural.runtimeError(error);
         }
     }
 
+    public execute(
+        statement: Statement.Statement,
+    ) {
+        statement.accept(this);
+    }
+
+
+
+    /** STATEMENTS */
+    public visitExpressionStatement(
+        statement: Statement.ExpressionStatement,
+    ) {
+        this.evaluate(statement.expression);
+        return null;
+    }
+
+    public visitPrintStatement(
+        statement: Statement.PrintStatement,
+    ) {
+        const value = this.evaluate(statement.expression);
+        console.log(this.stringify(value));
+        return null;
+    }
+
+
+
+    /** EXPRESSIONS */
     public visitLiteralExpression(
         literalExpression: Expression.LiteralExpression,
     ) {
