@@ -3,6 +3,7 @@ import {
 } from '../../data/enumerations';
 
 import Denatural from '../Denatural';
+import Environment from '../Environment';
 import * as Expression from '../Expression';
 import * as Statement from '../Statement';
 import Token from '../Token';
@@ -13,6 +14,8 @@ import {
 
 
 class Interpreter implements Expression.Visitor<any>, Statement.Visitor<any> {
+    private environment: Environment = new Environment();
+
     public interpret(
         statements: Statement.Statement[],
     ) {
@@ -46,6 +49,20 @@ class Interpreter implements Expression.Visitor<any>, Statement.Visitor<any> {
     ) {
         const value = this.evaluate(statement.expression);
         console.log(this.stringify(value));
+        return null;
+    }
+
+    public visitVariableStatement(
+        statement: Statement.VariableStatement,
+    ) {
+        let value = null;
+
+        if (statement.initializer !== null) {
+            value = this.evaluate(statement.initializer);
+        }
+
+        this.environment.define(statement.name.lexeme, value);
+
         return null;
     }
 
@@ -134,6 +151,13 @@ class Interpreter implements Expression.Visitor<any>, Statement.Visitor<any> {
         // Unreachable.
         return null;
     }
+
+    public visitVariableExpression(
+        expression: Expression.VariableExpression,
+    ) {
+        return this.environment.get(expression.name);
+    }
+
 
 
     private evaluate(
