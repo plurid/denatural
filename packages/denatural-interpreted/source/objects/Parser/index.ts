@@ -131,7 +131,7 @@ class Parser {
     }
 
     public assignment(): any {
-        const expression = this.equality();
+        const expression = this.or();
 
         if (
             this.match(TokenType.EQUAL)
@@ -145,6 +145,34 @@ class Parser {
             }
 
             this.error(equals, 'Invalid assignment target.');
+        }
+
+        return expression;
+    }
+
+    public or() {
+        let expression = this.and();
+
+        while (
+            this.match(TokenType.OR)
+        ) {
+            const operator = this.previous();
+            const right = this.and();
+            expression = new Expression.LogicalExpression(expression, operator, right);
+        }
+
+        return expression;
+    }
+
+    public and() {
+        let expression = this.equality();
+
+        while (
+            this.match(TokenType.OR)
+        ) {
+            const operator = this.previous();
+            const right = this.equality();
+            expression = new Expression.LogicalExpression(expression, operator, right);
         }
 
         return expression;
