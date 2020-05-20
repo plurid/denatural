@@ -100,6 +100,28 @@ class Interpreter implements Expression.Visitor<any>, Statement.Visitor<any> {
         return literalExpression.value;
     }
 
+    public visitLogicalExpression(
+        expression: Expression.LogicalExpression,
+    ) {
+        const left = this.evaluate(expression.left);
+
+        if (expression.operator.type === TokenType.OR) {
+            if (
+                this.isTruthy(left)
+            ) {
+                return left;
+            }
+        } else {
+            if (
+                !this.isTruthy(left)
+            ) {
+                return left;
+            }
+        }
+
+        return this.evaluate(expression.right);
+    }
+
     public visitBinaryExpression(
         binaryExpression: Expression.BinaryExpression,
     ) {
