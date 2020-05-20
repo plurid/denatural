@@ -45,6 +45,7 @@ class Environment {
     ) {
         if (this.values.has(name.lexeme)) {
             this.values.set(name.lexeme, value);
+            return;
         }
 
         if (this.enclosing) {

@@ -250,7 +250,7 @@ class Parser {
         let expression = this.equality();
 
         while (
-            this.match(TokenType.OR)
+            this.match(TokenType.AND)
         ) {
             const operator = this.previous();
             const right = this.equality();
