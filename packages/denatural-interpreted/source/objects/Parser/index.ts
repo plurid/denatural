@@ -82,7 +82,28 @@ class Parser {
     }
 
     public expression() {
-        return this.equality();
+        return this.assignment();
+    }
+
+
+    public assignment(): any {
+        const expression = this.equality();
+
+        if (
+            this.match(TokenType.EQUAL)
+        ) {
+            const equals = this.previous();
+            const value = this.assignment();
+
+            if (expression instanceof Expression.VariableExpression) {
+                const name = expression.name;
+                return new Expression.AssignExpression(name, value);
+            }
+
+            this.error(equals, 'Invalid assignment target.');
+        }
+
+        return expression;
     }
 
     public equality() {

@@ -158,6 +158,15 @@ class Interpreter implements Expression.Visitor<any>, Statement.Visitor<any> {
         return this.environment.get(expression.name);
     }
 
+    public visitAssignExpression(
+        expression: Expression.AssignExpression,
+    ) {
+        const value = this.evaluate(expression.value);
+
+        this.environment.assign(expression.name, value);
+        return value;
+    }
+
 
 
     private evaluate(
