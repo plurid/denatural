@@ -125,7 +125,7 @@ class Parser {
         ) {
             increment = this.expression();
         }
-        this.consume(TokenType.SEMICOLON, "Expect ')' after for clauses.");
+        this.consume(TokenType.RIGHT_PAREN, "Expect ')' after for clauses.");
 
         let body = this.statement();
 
