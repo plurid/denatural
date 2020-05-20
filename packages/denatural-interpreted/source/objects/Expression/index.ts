@@ -14,6 +14,7 @@ export interface Visitor<T> {
     visitGroupingExpression: (groupingExpression: GroupingExpression) => T;
     visitLiteralExpression: (literalExpression: LiteralExpression) => T;
     visitUnaryExpression: (unaryExpression: UnaryExpression) => T;
+    visitVariableExpression: (variableExpression: VariableExpression) => T;
 }
 
 
@@ -102,6 +103,28 @@ export class UnaryExpression extends Expression {
 }
 
 
+export class VariableExpression extends Expression {
+    public name: Token;
+    public initializer: Expression;
+
+    constructor(
+        name: Token,
+        initializer: Expression,
+    ) {
+        super();
+
+        this.name = name;
+        this.initializer = initializer;
+    }
+
+    accept<T>(
+        visitor: Visitor<T>,
+    ) {
+        return visitor.visitVariableExpression(this);
+    }
+}
+
+
 export class ASTPrinter implements Visitor<string> {
     public print(
         expresssion: Expression,
@@ -145,6 +168,12 @@ export class ASTPrinter implements Visitor<string> {
             unaryExpression.operator.lexeme,
             unaryExpression.right,
         );
+    }
+
+    public visitVariableExpression(
+        variableExpression: VariableExpression,
+    ) {
+        return variableExpression.name.toString();
     }
 
 
