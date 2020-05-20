@@ -37,6 +37,17 @@ class Interpreter implements Expression.Visitor<any>, Statement.Visitor<any> {
 
 
     /** STATEMENTS */
+    public visitBlockStatement(
+        statement: Statement.BlockStatement,
+    ) {
+        this.executeBlock(
+            statement.statements,
+            new Environment(this.environment),
+        );
+
+        return null;
+    }
+
     public visitExpressionStatement(
         statement: Statement.ExpressionStatement,
     ) {
@@ -80,13 +91,14 @@ class Interpreter implements Expression.Visitor<any>, Statement.Visitor<any> {
         return null;
     }
 
-    public visitBlockStatement(
-        statement: Statement.BlockStatement,
+    public visitWhileStatement(
+        statement: Statement.WhileStatement,
     ) {
-        this.executeBlock(
-            statement.statements,
-            new Environment(this.environment),
-        );
+        while (
+            this.isTruthy(this.evaluate(statement.condition))
+        ) {
+            this.execute(statement.body);
+        }
 
         return null;
     }
