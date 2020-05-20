@@ -99,17 +99,14 @@ class Denatural {
         const scanner = new Scanner(data);
         const tokens = scanner.scanTokens();
         const parser = new Parser(tokens);
-        const expression = parser.parse();
+        const statements = parser.parse();
 
+        // Stop if there was a syntax error.
         if (this.hadError) {
             return;
         }
 
-        if (!expression) {
-            return;
-        }
-
-        this.interpreter.interpret(expression);
+        this.interpreter.interpret(statements);
     }
 
     static error(
