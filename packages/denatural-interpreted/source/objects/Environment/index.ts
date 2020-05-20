@@ -10,7 +10,7 @@ class Environment {
     private values: Map<string, any> = new Map();
 
     constructor(
-        enclosing: Environment | undefined
+        enclosing?: Environment,
     ) {
         this.enclosing = enclosing;
     }
