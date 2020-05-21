@@ -17,7 +17,27 @@ import {
 
 
 class Interpreter implements Expression.Visitor<any>, Statement.Visitor<any> {
-    private environment: Environment = new Environment();
+    private globals: Environment = new Environment();
+    private environment: Environment = this.globals;
+
+    constructor() {
+        this.globals.define('clock', new class Clock implements Callable {
+            public arity() {
+                return 0;
+            }
+
+            public call(
+                interpreter: Interpreter,
+                args: any[],
+            ) {
+                return Math.floor(Date.now() / 1000);
+            }
+
+            public toString() {
+                return '<native fn>';
+            }
+        })
+    }
 
     public interpret(
         statements: Statement.Statement[],
