@@ -485,6 +485,10 @@ class Parser {
             !this.check(TokenType.RIGHT_PAREN)
         ) {
             do {
+                if (args.length >= 255) {
+                    this.error(this.peek(), 'Cannot have more than 255 arguments.');
+                }
+
                 args.push(this.expression());
             } while (
                 this.match(TokenType.COMMA)
