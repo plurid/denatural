@@ -10,6 +10,9 @@ import Token from '../Token';
 import {
     RuntimeError,
 } from '../Errors';
+import {
+    Callable,
+} from '../Callable';
 
 
 
@@ -224,6 +227,38 @@ class Interpreter implements Expression.Visitor<any>, Statement.Visitor<any> {
 
         this.environment.assign(expression.name, value);
         return value;
+    }
+
+    public visitCallExpression(
+        expression: Expression.CallExpression,
+    ) {
+        const callee = this.evaluate(expression.callee);
+
+        const args: any[] = [];
+        for (const arg of expression.args) {
+            args.push(this.evaluate(arg));
+        }
+
+        if (typeof callee.call !== 'function') {
+            throw new RuntimeError(
+                expression.paren,
+                'Can only call functions and classes.',
+            );
+        }
+
+        const callable = callee as Callable;
+
+        const argsLength = args.length;
+        const arity = callable.arity();
+
+        if (argsLength !== arity) {
+            throw new RuntimeError(
+                expression.paren,
+                `Expected ${arity} arguments, but got ${argsLength}.`,
+            );
+        }
+
+        return callable.call(this, args);
     }
 
 
