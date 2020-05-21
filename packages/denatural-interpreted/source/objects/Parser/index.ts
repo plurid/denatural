@@ -325,7 +325,23 @@ class Parser {
             return new Expression.UnaryExpression(operator, right);
         }
 
-        return this.primary();
+        return this.call();
+    }
+
+    public call() {
+        let expression = this.primary();
+
+        while (true) {
+            if (
+                this.match(TokenType.LEFT_PAREN)
+            ) {
+                expression = this.finishCall(expression);
+            } else {
+                break;
+            }
+        }
+
+        return expression;
     }
 
     public primary(): Expression.Expression {
@@ -458,6 +474,26 @@ class Parser {
 
     private previous() {
         return this.tokens[this.current - 1];
+    }
+
+    private finishCall(
+        callee: Expression.Expression,
+    ) {
+        const args: Expression.Expression[] = [];
+
+        if (
+            !this.check(TokenType.RIGHT_PAREN)
+        ) {
+            do {
+                args.push(this.expression());
+            } while (
+                this.match(TokenType.COMMA)
+            )
+        }
+
+        const paren = this.consume(TokenType.RIGHT_PAREN, "Expect ')' after arguments.");
+
+        return new Expression.CallExpression(callee, paren, args);
     }
 }
 
