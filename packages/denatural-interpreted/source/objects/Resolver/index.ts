@@ -4,11 +4,16 @@ import Interpreter from '../Interpreter';
 import Token from '../Token';
 import Denatural from '../Denatural';
 
+import {
+    FunctionType,
+} from '../../data/enumerations';
+
 
 
 class Resolver implements Expression.Visitor<any>, Statement.Visitor<any> {
     private interpreter: Interpreter;
     private scopes: Map<string, boolean>[] = [];
+    private currentFunction = FunctionType.NONE;
 
     constructor(
         interpeter: Interpreter,
@@ -50,7 +55,7 @@ class Resolver implements Expression.Visitor<any>, Statement.Visitor<any> {
         this.declare(statement.name);
         this.define(statement.name);
 
-        this.resolveFunction(statement);
+        this.resolveFunction(statement, FunctionType.FUNCTION);
 
         return null;
     }
@@ -172,6 +177,17 @@ class Resolver implements Expression.Visitor<any>, Statement.Visitor<any> {
     public visitReturnStatement(
         statement: Statement.ReturnStatement,
     ) {
+        if (this.currentFunction === FunctionType.NONE) {
+            Denatural.error(
+                statement.keyword,
+                'Cannot return from top-level code.',
+            );
+        }
+
+        if (statement) {
+            this.resolveExpression(statement.value);
+        }
+
         return null;
     }
 
@@ -199,7 +215,11 @@ class Resolver implements Expression.Visitor<any>, Statement.Visitor<any> {
 
     public resolveFunction(
         functionStatement: Statement.FunctionStatement,
+        type: FunctionType,
     ) {
+        const enclosingFunction = this.currentFunction;
+        this.currentFunction = type;
+
         this.beginScope();
 
         for (const param of functionStatement.params) {
@@ -209,6 +229,8 @@ class Resolver implements Expression.Visitor<any>, Statement.Visitor<any> {
 
         this.resolve(functionStatement.body);
         this.endScope();
+
+        this.currentFunction = enclosingFunction;
     }
 
 

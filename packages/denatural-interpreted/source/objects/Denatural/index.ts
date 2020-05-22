@@ -110,6 +110,11 @@ class Denatural {
         const resolver = new Resolver(this.interpreter);
         resolver.resolve(statements);
 
+        // Stop if there was a resolution error.
+        if (this.hadError) {
+            return;
+        }
+
         this.interpreter.interpret(statements);
     }
 
