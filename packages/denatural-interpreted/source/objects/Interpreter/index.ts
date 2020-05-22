@@ -131,7 +131,7 @@ class Interpreter implements Expression.Visitor<any>, Statement.Visitor<any> {
     public visitFunctionStatement(
         statement: Statement.FunctionStatement,
     ) {
-        const denaturalFunction = new DenaturalFunction(statement);
+        const denaturalFunction = new DenaturalFunction(statement, this.environment);
 
         this.environment.define(
             statement.name.lexeme,
