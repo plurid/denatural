@@ -10,14 +10,14 @@ import Token from '../Token';
 import {
     RuntimeError,
 } from '../Errors';
-import {
+import DenaturalFunction, {
     Callable,
 } from '../Callable';
 
 
 
 class Interpreter implements Expression.Visitor<any>, Statement.Visitor<any> {
-    private globals: Environment = new Environment();
+    public globals: Environment = new Environment();
     private environment: Environment = this.globals;
 
     constructor() {
@@ -122,6 +122,19 @@ class Interpreter implements Expression.Visitor<any>, Statement.Visitor<any> {
         ) {
             this.execute(statement.body);
         }
+
+        return null;
+    }
+
+    public visitFunctionStatement(
+        statement: Statement.FunctionStatement,
+    ) {
+        const denaturalFunction = new DenaturalFunction(statement);
+
+        this.environment.define(
+            statement.name.lexeme,
+            denaturalFunction,
+        );
 
         return null;
     }
@@ -282,14 +295,33 @@ class Interpreter implements Expression.Visitor<any>, Statement.Visitor<any> {
     }
 
 
+    public executeBlock(
+        statements: Statement.Statement[],
+        environment: Environment,
+    ) {
+        const previous = this.environment;
 
-    private evaluate(
+        try {
+            this.environment = environment;
+
+            for (const statement of statements) {
+                this.execute(statement);
+            }
+        } catch (error) {
+            this.environment = previous;
+            return;
+        } finally {
+            this.environment = previous;
+        }
+    }
+
+    public evaluate(
         expression: Expression.Expression,
     ): any {
         return expression.accept(this);
     }
 
-    private isTruthy(
+    public isTruthy(
         object: any,
     ) {
         if (object === null) {
@@ -303,7 +335,7 @@ class Interpreter implements Expression.Visitor<any>, Statement.Visitor<any> {
         return true;
     }
 
-    private isEqual(
+    public isEqual(
         a: any,
         b: any,
     ) {
@@ -323,7 +355,7 @@ class Interpreter implements Expression.Visitor<any>, Statement.Visitor<any> {
         return a === b;
     }
 
-    private checkNumberOperand(
+    public checkNumberOperand(
         operator: Token,
         operand: any,
     ) {
@@ -334,7 +366,7 @@ class Interpreter implements Expression.Visitor<any>, Statement.Visitor<any> {
         throw new RuntimeError(operator, 'Operand must be a number.');
     }
 
-    private checkNumberOperands(
+    public checkNumberOperands(
         operator: Token,
         left: any,
         right: any,
@@ -346,7 +378,7 @@ class Interpreter implements Expression.Visitor<any>, Statement.Visitor<any> {
         throw new RuntimeError(operator, 'Operands must be numbers.');
     }
 
-    private stringify(
+    public stringify(
         object: any,
     ) {
         if (object === null) {
@@ -362,26 +394,6 @@ class Interpreter implements Expression.Visitor<any>, Statement.Visitor<any> {
         }
 
         return object.toString();
-    }
-
-    private executeBlock(
-        statements: Statement.Statement[],
-        environment: Environment,
-    ) {
-        const previous = this.environment;
-
-        try {
-            this.environment = environment;
-
-            for (const statement of statements) {
-                this.execute(statement);
-            }
-        } catch (error) {
-            this.environment = previous;
-            return;
-        } finally {
-            this.environment = previous;
-        }
     }
 }
 
