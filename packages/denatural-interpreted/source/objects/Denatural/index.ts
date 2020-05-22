@@ -10,6 +10,7 @@ import Token from '../Token';
 import * as Expression from '../Expression';
 import Parser from '../Parser';
 import Interpreter from '../Interpreter';
+import Resolver from '../Resolver';
 import {
     RuntimeError,
 } from '../Errors';
@@ -105,6 +106,9 @@ class Denatural {
         if (this.hadError) {
             return;
         }
+
+        const resolver = new Resolver(this.interpreter);
+        resolver.resolve(statements);
 
         this.interpreter.interpret(statements);
     }

@@ -58,6 +58,33 @@ class Environment {
             `Undefined variable '${name.lexeme}'`,
         );
     }
+
+    public getAt(
+        distance: number,
+        name: string,
+    ) {
+        return this.ancestor(distance)?.values.get(name);
+    }
+
+    public ancestor(
+        distance: number,
+    ) {
+        let environment: Environment | undefined = this;
+
+        for (let i = 0; i < distance; i++) {
+            environment = environment?.enclosing;
+        }
+
+        return environment;
+    }
+
+    public assignAt(
+        distance: number,
+        name: Token,
+        value: any,
+    ) {
+        this.ancestor(distance)?.values.set(name.lexeme, value);
+    }
 }
 
 

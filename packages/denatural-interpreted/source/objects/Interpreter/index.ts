@@ -20,6 +20,7 @@ import {
 
 class Interpreter implements Expression.Visitor<any>, Statement.Visitor<any> {
     public globals: Environment = new Environment();
+    public locals: Map<Expression.Expression, number> = new Map();
     private environment: Environment = this.globals;
 
     constructor() {
@@ -57,6 +58,16 @@ class Interpreter implements Expression.Visitor<any>, Statement.Visitor<any> {
         statement: Statement.Statement,
     ) {
         statement.accept(this);
+    }
+
+    public resolve(
+        expression: Expression.Expression,
+        depth: number,
+    ) {
+        this.locals.set(
+            expression,
+            depth,
+        );
     }
 
 
@@ -263,13 +274,30 @@ class Interpreter implements Expression.Visitor<any>, Statement.Visitor<any> {
     public visitVariableExpression(
         expression: Expression.VariableExpression,
     ) {
-        return this.environment.get(expression.name);
+        return this.lookUpVariable(
+            expression.name,
+            expression,
+        );
     }
 
     public visitAssignExpression(
         expression: Expression.AssignExpression,
     ) {
         const value = this.evaluate(expression.value);
+
+        const distance = this.locals.get(expression);
+        if (distance) {
+            this.environment.assignAt(
+                distance,
+                expression.name,
+                value,
+            );
+        } else {
+            this.globals.assign(
+                expression.name,
+                value,
+            );
+        }
 
         this.environment.assign(expression.name, value);
         return value;
@@ -407,6 +435,19 @@ class Interpreter implements Expression.Visitor<any>, Statement.Visitor<any> {
         }
 
         return object.toString();
+    }
+
+    private lookUpVariable(
+        name: Token,
+        expression: Expression.Expression,
+    ) {
+        const distance = this.locals.get(expression);
+
+        if (distance) {
+            return this.environment.getAt(distance, name.lexeme);
+        } else {
+            return this.globals.get(name);
+        }
     }
 }
 
