@@ -1,0 +1,6 @@
+fun sayHello(first, last) {
+    print "Hello, " + first + " " + last + "!";
+}
+
+
+sayHello("Dear", "Programmer");
