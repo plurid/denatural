@@ -3,10 +3,10 @@ import Token from '../Token';
 
 
 export class RuntimeError extends Error {
-    public token: Token;
+    public token: Token | null;
 
     constructor(
-        token: Token,
+        token: Token | null,
         message: string,
     ) {
         super(message);

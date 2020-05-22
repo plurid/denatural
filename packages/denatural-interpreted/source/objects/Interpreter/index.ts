@@ -7,10 +7,12 @@ import Environment from '../Environment';
 import * as Expression from '../Expression';
 import * as Statement from '../Statement';
 import Token from '../Token';
+import Return from '../Return';
+import DenaturalFunction from '../Function';
 import {
     RuntimeError,
 } from '../Errors';
-import DenaturalFunction, {
+import {
     Callable,
 } from '../Callable';
 
@@ -137,6 +139,17 @@ class Interpreter implements Expression.Visitor<any>, Statement.Visitor<any> {
         );
 
         return null;
+    }
+
+    public visitReturnStatement(
+        statement: Statement.ReturnStatement,
+    ) {
+        let value = null;
+        if (statement.value !== null) {
+            value = this.evaluate(statement.value);
+        }
+
+        throw new Return(value);
     }
 
 
