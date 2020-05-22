@@ -322,7 +322,7 @@ class Interpreter implements Expression.Visitor<any>, Statement.Visitor<any> {
             }
         } catch (error) {
             this.environment = previous;
-            return;
+            throw error;
         } finally {
             this.environment = previous;
         }
