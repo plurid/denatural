@@ -9,18 +9,21 @@ import {
 
 class DenaturalFunction implements Callable {
     private declaration: Statement.FunctionStatement;
+    private closure: Environment;
 
     constructor(
         declaration: Statement.FunctionStatement,
+        closure: Environment,
     ) {
         this.declaration = declaration;
+        this.closure = closure;
     }
 
     public call(
         interpreter: Interpreter,
         args: any[],
     ) {
-        const environment = new Environment(interpreter.globals);
+        const environment = new Environment(this.closure);
 
         for (const key of this.declaration.params.keys()) {
             environment.define(
