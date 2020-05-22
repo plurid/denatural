@@ -443,7 +443,7 @@ class Interpreter implements Expression.Visitor<any>, Statement.Visitor<any> {
     ) {
         const distance = this.locals.get(expression);
 
-        if (distance) {
+        if (typeof distance !== 'undefined') {
             return this.environment.getAt(distance, name.lexeme);
         } else {
             return this.globals.get(name);

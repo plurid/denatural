@@ -67,7 +67,7 @@ class Resolver implements Expression.Visitor<any>, Statement.Visitor<any> {
         const scope = this.scopes[lastScopeIndex];
 
         if (
-            this.scopes.length === 0
+            this.scopes.length !== 0
             && scope.get(expression.name.lexeme) === false
         ) {
             Denatural.error(
@@ -98,7 +98,7 @@ class Resolver implements Expression.Visitor<any>, Statement.Visitor<any> {
     public visitExpressionStatement(
         statement: Statement.ExpressionStatement,
     ) {
-        this.resolveStatement(statement);
+        this.resolveExpression(statement.expression);
         return null;
     }
 
@@ -113,6 +113,7 @@ class Resolver implements Expression.Visitor<any>, Statement.Visitor<any> {
     public visitGroupingExpression(
         expression: Expression.GroupingExpression,
     ) {
+        this.resolveExpression(expression.expression);
         return null;
     }
 
@@ -134,6 +135,12 @@ class Resolver implements Expression.Visitor<any>, Statement.Visitor<any> {
     public visitCallExpression(
         expression: Expression.CallExpression,
     ) {
+        this.resolveExpression(expression.callee);
+
+        for (const arg of expression.args) {
+            this.resolveExpression(arg);
+        }
+
         return null;
     }
 
