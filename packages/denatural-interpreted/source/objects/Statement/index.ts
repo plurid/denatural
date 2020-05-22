@@ -19,6 +19,7 @@ export interface Visitor<T> {
     visitFunctionStatement: (functionStatement: FunctionStatement) => T;
     visitIfStatement: (ifStatement: IfStatement) => T;
     visitPrintStatement: (printStatement: PrintStatement) => T;
+    visitReturnStatement: (returnStatement: ReturnStatement) => T;
     visitVariableStatement: (variableStatement: VariableStatement) => T;
     visitWhileStatement: (whileStatement: WhileStatement) => T;
 }
@@ -128,6 +129,28 @@ export class PrintStatement extends Statement {
         visitor: Visitor<T>,
     ) {
         return visitor.visitPrintStatement(this);
+    }
+}
+
+
+export class ReturnStatement extends Statement {
+    public keyword: Token;
+    public value: Expression;
+
+    constructor(
+        keyword: Token,
+        value: Expression,
+    ) {
+        super();
+
+        this.keyword = keyword;
+        this.value = value;
+    }
+
+    accept<T>(
+        visitor: Visitor<T>,
+    ) {
+        return visitor.visitReturnStatement(this);
     }
 }
 
