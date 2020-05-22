@@ -18,3 +18,9 @@ export enum TokenType {
 
     EOF,
 }
+
+
+export enum FunctionType {
+    NONE,
+    FUNCTION,
+}
