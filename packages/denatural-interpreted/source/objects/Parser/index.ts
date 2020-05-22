@@ -34,6 +34,12 @@ class Parser {
     public declaration() {
         try {
             if (
+                this.match(TokenType.FUN)
+            ) {
+                return this.function('function');
+            }
+
+            if (
                 this.match(TokenType.VAR)
             ) {
                 return this.variableDeclaration();
@@ -197,6 +203,38 @@ class Parser {
         return this.assignment();
     }
 
+
+    public function(
+        kind: string,
+    ) {
+        const name = this.consume(TokenType.IDENTIFIER, `Expect ${kind} name.`);
+
+        this.consume(TokenType.LEFT_PAREN, `Expect '(' after ${kind} name.`);
+
+        const parameters: Token[] = [];
+
+        if (!this.check(TokenType.RIGHT_PAREN)) {
+            do {
+                if (parameters.length >= 255) {
+                    this.error(this.peek(), 'Cannot have more than 255 parameters.');
+                }
+
+                parameters.push(
+                    this.consume(TokenType.IDENTIFIER, 'Expect parameter name.')
+                );
+            } while (
+                this.match(TokenType.COMMA)
+            );
+        }
+
+        this.consume(TokenType.RIGHT_PAREN, `Expect ')' after parameters.`);
+
+        this.consume(TokenType.LEFT_BRACE, `Expect '{' before ${kind} name..`);
+
+        const body = this.block();
+
+        return new Statement.FunctionStatement(name, parameters, body);
+    }
 
     public block() {
         const statements: any[] = [];
