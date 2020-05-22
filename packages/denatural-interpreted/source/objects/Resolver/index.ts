@@ -234,6 +234,14 @@ class Resolver implements Expression.Visitor<any>, Statement.Visitor<any> {
         const lastScopeIndex = this.scopes.length - 1;
 
         const scope = this.scopes[lastScopeIndex];
+
+        if (scope.has(name.lexeme)) {
+            Denatural.error(
+                name,
+                'Variable with this name already declared in this scope.',
+            );
+        }
+
         scope.set(
             name.lexeme,
             false,
