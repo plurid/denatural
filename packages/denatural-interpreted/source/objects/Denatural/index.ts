@@ -131,7 +131,7 @@ class Denatural {
         error: RuntimeError,
     ) {
         console.log(
-            error.message + '\n[line ' + error.token.line + ']'
+            error.message + '\n[line ' + error.token?.line + ']'
         );
         this.hadRuntimeError = true;
     }
