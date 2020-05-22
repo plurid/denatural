@@ -87,6 +87,12 @@ class Parser {
         }
 
         if (
+            this.match(TokenType.RETURN)
+        ) {
+            return this.returnStatement();
+        }
+
+        if (
             this.match(TokenType.WHILE)
         ) {
             return this.whileStatement();
@@ -182,6 +188,20 @@ class Parser {
         const value = this.expression();
         this.consume(TokenType.SEMICOLON, "Expect ';' after value.");
         return new Statement.PrintStatement(value);
+    }
+
+    public returnStatement(): Statement.ReturnStatement {
+        const keyword = this.previous();
+        let value = null;
+        if (
+            !this.check(TokenType.SEMICOLON)
+        ) {
+            value = this.expression();
+        }
+
+        this.consume(TokenType.SEMICOLON, "Expect ';' after value.");
+
+        return new Statement.ReturnStatement(keyword, value);
     }
 
     public whileStatement(): Statement.WhileStatement {
