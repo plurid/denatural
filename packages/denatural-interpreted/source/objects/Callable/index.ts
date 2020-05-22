@@ -29,10 +29,10 @@ class DenaturalFunction implements Callable {
     ) {
         const environment = new Environment(interpreter.globals);
 
-        for (const parameter of this.declaration.params) {
+        for (const key of this.declaration.params.keys()) {
             environment.define(
-                parameter.lexeme,
-                parameter,
+                this.declaration.params[key].lexeme,
+                args[key],
             );
         }
 
