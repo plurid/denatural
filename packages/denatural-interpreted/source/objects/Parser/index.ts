@@ -303,9 +303,16 @@ class Parser {
             const equals = this.previous();
             const value = this.assignment();
 
-            if (expression instanceof Expression.VariableExpression) {
+            if (
+                expression instanceof Expression.VariableExpression
+            ) {
                 const name = expression.name;
                 return new Expression.AssignExpression(name, value);
+            } else if (
+                expression instanceof Expression.GetExpression
+            ) {
+                const get = expression;
+                return new Expression.SetExpression(get.object, get.name, value);
             }
 
             this.error(equals, 'Invalid assignment target.');

@@ -29,6 +29,13 @@ class DenaturalInstance {
         );
     }
 
+    set(
+        name: Token,
+        value: any,
+    ) {
+        this.fields.set(name.lexeme, value);
+    }
+
     toString() {
         return this.denaturalClass.name + ' instance';
     }
