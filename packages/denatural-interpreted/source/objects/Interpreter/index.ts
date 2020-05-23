@@ -165,6 +165,36 @@ class Interpreter implements Expression.Visitor<any>, Statement.Visitor<any> {
         throw new Return(value);
     }
 
+    public visitClassStatement(
+        statement: Statement.ClassStatement,
+    ) {
+        this.environment.define(
+            statement.name.lexeme,
+            null,
+        );
+
+        const methods = new Map();
+        for (const method of statement.methods) {
+            const denaturalFunction = new DenaturalFunction(method, this.environment);
+            methods.set(
+                method.name.lexeme,
+                denaturalFunction,
+            );
+        }
+
+        const denaturalClass = new DenaturalClass(
+            statement.name.lexeme,
+            methods,
+        );
+
+        this.environment.assign(
+            statement.name,
+            denaturalClass,
+        );
+
+        return null;
+    }
+
 
 
     /** EXPRESSIONS */
@@ -337,36 +367,6 @@ class Interpreter implements Expression.Visitor<any>, Statement.Visitor<any> {
         return callable.call(this, args);
     }
 
-    public visitClassStatement(
-        statement: Statement.ClassStatement,
-    ) {
-        this.environment.define(
-            statement.name.lexeme,
-            null,
-        );
-
-        const methods = new Map();
-        for (const method of statement.methods) {
-            const denaturalFunction = new DenaturalFunction(method, this.environment);
-            methods.set(
-                method.name.lexeme,
-                denaturalFunction,
-            );
-        }
-
-        const denaturalClass = new DenaturalClass(
-            statement.name.lexeme,
-            methods,
-        );
-
-        this.environment.assign(
-            statement.name,
-            denaturalClass,
-        );
-
-        return null;
-    }
-
     public visitGetExpression(
         expression: Expression.GetExpression,
     ) {
@@ -399,6 +399,15 @@ class Interpreter implements Expression.Visitor<any>, Statement.Visitor<any> {
         const value = this.evaluate(expression.value);
         object.set(expression.name, value);
         return value;
+    }
+
+    public visitThisExpression(
+        expression: Expression.ThisExpression,
+    ) {
+        return this.lookUpVariable(
+            expression.keyword,
+            expression,
+        );
     }
 
 

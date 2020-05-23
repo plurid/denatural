@@ -463,6 +463,14 @@ class Parser {
             return new Expression.LiteralExpression(this.previous().literal);
         }
 
+
+        if (
+            this.match(TokenType.THIS)
+        ) {
+            return new Expression.ThisExpression(this.previous());
+        }
+
+
         if (
             this.match(TokenType.IDENTIFIER)
         ) {

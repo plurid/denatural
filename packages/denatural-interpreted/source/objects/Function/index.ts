@@ -1,6 +1,7 @@
 import Interpreter from '../Interpreter';
 import Environment from '../Environment';
 import * as Statement from '../Statement';
+import DenaturalInstance from '../Instance';
 import {
     Callable,
 } from '../Callable';
@@ -42,6 +43,14 @@ class DenaturalFunction implements Callable {
         }
 
         return null;
+    }
+
+    public bind(
+        instance: DenaturalInstance,
+    ) {
+        const environment = new Environment(this.closure);
+        environment.define('this', instance);
+        return new DenaturalFunction(this.declaration, environment);
     }
 
     public arity() {

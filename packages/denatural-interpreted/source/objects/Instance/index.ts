@@ -24,8 +24,8 @@ class DenaturalInstance {
         }
 
         const method = this.denaturalClass.findMethod(name.lexeme);
-        if (method !== null) {
-            return method;
+        if (method) {
+            return method.bind(this);
         }
 
         throw new RuntimeError(
