@@ -27,11 +27,24 @@ class DenaturalClass implements Callable {
         args: any[],
     ) {
         const instance = new DenaturalInstance(this);
+
+        const initializer = this.findMethod('init');
+        if (initializer) {
+            initializer
+                .bind(instance)
+                .call(interpreter, args);
+        }
+
         return instance;
     }
 
     public arity() {
-        return 0;
+        const initializer = this.findMethod('init');
+        if (!initializer) {
+            return 0;
+        }
+
+        return initializer.arity();
     }
 
     public findMethod(
