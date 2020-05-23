@@ -165,6 +165,13 @@ class Resolver implements Expression.Visitor<any>, Statement.Visitor<any> {
         return null;
     }
 
+    public visitThisExpression(
+        expression: Expression.ThisExpression,
+    ) {
+        this.resolveLocal(expression, expression.keyword);
+        return null;
+    }
+
     public visitIfStatement(
         statement: Statement.IfStatement,
     ) {
@@ -219,14 +226,25 @@ class Resolver implements Expression.Visitor<any>, Statement.Visitor<any> {
         this.declare(statement.name);
         this.define(statement.name);
 
+        this.beginScope();
+
+        const lastScopeIndex = this.scopes.length - 1;
+        const scope = this.scopes[lastScopeIndex];
+        scope.set(
+            'this',
+            true,
+        );
+        this.scopes[lastScopeIndex] = new Map(scope);
+
         for (const method of statement.methods) {
             const declaration = FunctionType.METHOD;
             this.resolveFunction(method, declaration);
         }
 
+        this.endScope();
+
         return null;
     }
-
 
 
     public resolve(
