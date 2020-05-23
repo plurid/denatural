@@ -15,6 +15,7 @@ export abstract class Statement {
 
 export interface Visitor<T> {
     visitBlockStatement: (blockStatement: BlockStatement) => T;
+    visitClassStatement: (classStatement: ClassStatement) => T;
     visitExpressionStatement: (expressionStatement: ExpressionStatement) => T;
     visitFunctionStatement: (functionStatement: FunctionStatement) => T;
     visitIfStatement: (ifStatement: IfStatement) => T;
@@ -41,6 +42,28 @@ export class BlockStatement extends Statement {
         visitor: Visitor<T>,
     ) {
         return visitor.visitBlockStatement(this);
+    }
+}
+
+
+export class ClassStatement extends Statement {
+    public name: Token;
+    public methods: FunctionStatement[];
+
+    constructor(
+        name: Token,
+        methods: FunctionStatement[],
+    ) {
+        super();
+
+        this.name = name;
+        this.methods = methods;
+    }
+
+    accept<T>(
+        visitor: Visitor<T>,
+    ) {
+        return visitor.visitClassStatement(this);
     }
 }
 
