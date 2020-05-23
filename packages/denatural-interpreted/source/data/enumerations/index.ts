@@ -23,6 +23,7 @@ export enum TokenType {
 export enum FunctionType {
     NONE,
     FUNCTION,
+    INITIALIZER,
     METHOD,
 }
 

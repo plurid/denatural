@@ -11,13 +11,16 @@ import {
 class DenaturalFunction implements Callable {
     private declaration: Statement.FunctionStatement;
     private closure: Environment;
+    private isInitializer: boolean;
 
     constructor(
         declaration: Statement.FunctionStatement,
         closure: Environment,
+        isInitializer: boolean,
     ) {
         this.declaration = declaration;
         this.closure = closure;
+        this.isInitializer = isInitializer;
     }
 
     public call(
@@ -39,7 +42,15 @@ class DenaturalFunction implements Callable {
                 environment,
             );
         } catch (returnValue) {
+            if (this.isInitializer) {
+                return this.closure.getAt(0, 'this');
+            }
+
             return returnValue.value;
+        }
+
+        if (this.isInitializer) {
+            return this.closure.getAt(0, 'this');
         }
 
         return null;
@@ -50,7 +61,7 @@ class DenaturalFunction implements Callable {
     ) {
         const environment = new Environment(this.closure);
         environment.define('this', instance);
-        return new DenaturalFunction(this.declaration, environment);
+        return new DenaturalFunction(this.declaration, environment, this.isInitializer);
     }
 
     public arity() {

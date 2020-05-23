@@ -224,6 +224,13 @@ class Resolver implements Expression.Visitor<any>, Statement.Visitor<any> {
         }
 
         if (statement) {
+            if (this.currentFunction === FunctionType.INITIALIZER) {
+                Denatural.error(
+                    statement.keyword,
+                    'Cannot return a value from an initializer.',
+                );
+            }
+
             this.resolveExpression(statement.value);
         }
 
@@ -250,7 +257,11 @@ class Resolver implements Expression.Visitor<any>, Statement.Visitor<any> {
         this.scopes[lastScopeIndex] = new Map(scope);
 
         for (const method of statement.methods) {
-            const declaration = FunctionType.METHOD;
+            let declaration = FunctionType.METHOD;
+            if (method.name.lexeme === 'init') {
+                declaration = FunctionType.INITIALIZER;
+            }
+
             this.resolveFunction(method, declaration);
         }
 
