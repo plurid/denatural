@@ -188,8 +188,8 @@ class Interpreter implements Expression.Visitor<any>, Statement.Visitor<any> {
         );
 
         if (statement.superclass) {
-            const environment = new Environment(this.environment);
-            environment.define('super', superclass);
+            this.environment = new Environment(this.environment);
+            this.environment.define('super', superclass);
         }
 
         const methods = new Map();
