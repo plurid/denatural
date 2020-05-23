@@ -19,7 +19,7 @@ const expressions = [
     ['Literal', 'value: any'],
     ['Logical', 'left: Expression', 'operator: Token', 'right: Expression'],
     ['Set', 'object: Expression', 'name: Token', 'value: Expression'],
-    ['Super', 'keyword: Token', 'method Token'],
+    ['Super', 'keyword: Token', 'method: Token'],
     ['This', 'keyword: Token'],
     ['Unary', 'operator: Token', 'right: Expression'],
     ['Variable', 'name: Token'],
