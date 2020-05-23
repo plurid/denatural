@@ -150,6 +150,13 @@ class Resolver implements Expression.Visitor<any>, Statement.Visitor<any> {
         return null;
     }
 
+    public visitGetExpression(
+        expression: Expression.GetExpression,
+    ) {
+        this.resolveExpression(expression.object);
+        return null;
+    }
+
     public visitIfStatement(
         statement: Statement.IfStatement,
     ) {
