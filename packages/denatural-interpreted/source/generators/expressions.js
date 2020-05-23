@@ -18,6 +18,7 @@ const expressions = [
     ['Grouping', 'expression: Expression'],
     ['Literal', 'value: any'],
     ['Logical', 'left: Expression', 'operator: Token', 'right: Expression'],
+    ['Set', 'object: Expression', 'name: Token', 'value: Expression'],
     ['Unary', 'operator: Token', 'right: Expression'],
     ['Variable', 'name: Token'],
 ];
