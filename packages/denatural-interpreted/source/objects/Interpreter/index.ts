@@ -344,7 +344,21 @@ class Interpreter implements Expression.Visitor<any>, Statement.Visitor<any> {
             statement.name.lexeme,
             null,
         );
-        const denaturalClass = new DenaturalClass(statement.name.lexeme);
+
+        const methods = new Map();
+        for (const method of statement.methods) {
+            const denaturalFunction = new DenaturalFunction(method, this.environment);
+            methods.set(
+                method.name.lexeme,
+                denaturalFunction,
+            );
+        }
+
+        const denaturalClass = new DenaturalClass(
+            statement.name.lexeme,
+            methods,
+        );
+
         this.environment.assign(
             statement.name,
             denaturalClass,

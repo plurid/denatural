@@ -23,4 +23,5 @@ export enum TokenType {
 export enum FunctionType {
     NONE,
     FUNCTION,
+    METHOD,
 }
