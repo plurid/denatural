@@ -34,6 +34,12 @@ class Parser {
     public declaration() {
         try {
             if (
+                this.match(TokenType.CLASS)
+            ) {
+                return this.classDeclaration();
+            }
+
+            if (
                 this.match(TokenType.FUN)
             ) {
                 return this.function('function');
@@ -50,6 +56,24 @@ class Parser {
             this.synchronize();
             return null;
         }
+    }
+
+    public classDeclaration() {
+        const name = this.consume(TokenType.IDENTIFIER, 'Expect class name');
+        this.consume(TokenType.LEFT_BRACE, "Expect '{' before class body.");
+
+        const methods = [];
+
+        while (
+            !this.check(TokenType.RIGHT_BRACE)
+            && !this.isAtEnd()
+        ) {
+            methods.push(this.function('method'));
+        }
+
+        this.consume(TokenType.RIGHT_BRACE, "Expect '}' after class body.");
+
+        return new Statement.ClassStatement(name, methods);
     }
 
     public variableDeclaration() {
