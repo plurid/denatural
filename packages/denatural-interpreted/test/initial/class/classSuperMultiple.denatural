@@ -10,6 +10,7 @@ class B < A {
     }
 
     test() {
+        print "B test";
         super.method();
     }
 }
