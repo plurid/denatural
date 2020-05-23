@@ -18,6 +18,7 @@ export interface Visitor<T> {
     visitLiteralExpression: (literalExpression: LiteralExpression) => T;
     visitLogicalExpression: (logicalExpression: LogicalExpression) => T;
     visitSetExpression: (setExpression: SetExpression) => T;
+    visitThisExpression: (thisExpression: ThisExpression) => T;
     visitUnaryExpression: (unaryExpression: UnaryExpression) => T;
     visitVariableExpression: (variableExpression: VariableExpression) => T;
 }
@@ -205,6 +206,25 @@ export class SetExpression extends Expression {
 }
 
 
+export class ThisExpression extends Expression {
+    public keyword: Token;
+
+    constructor(
+        keyword: Token,
+    ) {
+        super();
+
+        this.keyword = keyword;
+    }
+
+    accept<T>(
+        visitor: Visitor<T>,
+    ) {
+        return visitor.visitThisExpression(this);
+    }
+}
+
+
 export class UnaryExpression extends Expression {
     public operator: Token;
     public right: Expression;
@@ -314,6 +334,12 @@ export class ASTPrinter implements Visitor<string> {
         setExpression: SetExpression,
     ) {
         return setExpression.name.lexeme;
+    }
+
+    public visitThisExpression(
+        thisExpression: ThisExpression,
+    ) {
+        return thisExpression.keyword.lexeme;
     }
 
     public visitUnaryExpression(
