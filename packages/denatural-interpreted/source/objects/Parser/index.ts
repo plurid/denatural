@@ -60,6 +60,15 @@ class Parser {
 
     public classDeclaration() {
         const name = this.consume(TokenType.IDENTIFIER, 'Expect class name');
+
+        let superclass = null;
+        if (
+            this.match(TokenType.LESS)
+        ) {
+            this.consume(TokenType.IDENTIFIER, 'Expect superclass name.');
+            superclass = new Expression.VariableExpression(this.previous());
+        }
+
         this.consume(TokenType.LEFT_BRACE, "Expect '{' before class body.");
 
         const methods = [];
@@ -73,7 +82,7 @@ class Parser {
 
         this.consume(TokenType.RIGHT_BRACE, "Expect '}' after class body.");
 
-        return new Statement.ClassStatement(name, methods);
+        return new Statement.ClassStatement(name, superclass, methods);
     }
 
     public variableDeclaration() {

@@ -2,6 +2,7 @@ import Token from '../Token';
 
 import {
     Expression,
+    VariableExpression,
 } from '../Expression';
 
 
@@ -48,15 +49,18 @@ export class BlockStatement extends Statement {
 
 export class ClassStatement extends Statement {
     public name: Token;
+    public superclass: VariableExpression | null;
     public methods: FunctionStatement[];
 
     constructor(
         name: Token,
+        superclass: VariableExpression | null,
         methods: FunctionStatement[],
     ) {
         super();
 
         this.name = name;
+        this.superclass = superclass;
         this.methods = methods;
     }
 

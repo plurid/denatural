@@ -246,6 +246,20 @@ class Resolver implements Expression.Visitor<any>, Statement.Visitor<any> {
         this.declare(statement.name);
         this.define(statement.name);
 
+        if (
+            statement.superclass
+            && statement.name.lexeme === statement.superclass.name.lexeme
+        ) {
+            Denatural.error(
+                statement.superclass.name,
+                'A class cannot inherit from itself.',
+            );
+        }
+
+        if (statement.superclass) {
+            this.resolveExpression(statement.superclass);
+        }
+
         this.beginScope();
 
         const lastScopeIndex = this.scopes.length - 1;

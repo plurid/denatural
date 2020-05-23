@@ -12,13 +12,16 @@ import Interpreter from '../Interpreter';
 
 class DenaturalClass implements Callable {
     public name: string;
+    public superclass: DenaturalClass | null;
     public methods: Map<string, DenaturalFunction>;
 
     constructor(
         name: string,
+        superclass: DenaturalClass | null,
         methods: Map<string, DenaturalFunction>,
     ) {
         this.name = name;
+        this.superclass = superclass;
         this.methods = methods;
     }
 

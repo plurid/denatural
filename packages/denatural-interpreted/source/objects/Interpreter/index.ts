@@ -168,6 +168,20 @@ class Interpreter implements Expression.Visitor<any>, Statement.Visitor<any> {
     public visitClassStatement(
         statement: Statement.ClassStatement,
     ) {
+        let superclass = null;
+        if (statement.superclass) {
+            superclass = this.evaluate(statement.superclass);
+
+            if (
+                !(superclass instanceof DenaturalClass)
+            ) {
+                throw new RuntimeError(
+                    statement.superclass.name,
+                    'Superclass must be a class.'
+                );
+            }
+        }
+
         this.environment.define(
             statement.name.lexeme,
             null,
@@ -189,6 +203,7 @@ class Interpreter implements Expression.Visitor<any>, Statement.Visitor<any> {
 
         const denaturalClass = new DenaturalClass(
             statement.name.lexeme,
+            superclass,
             methods,
         );
 
