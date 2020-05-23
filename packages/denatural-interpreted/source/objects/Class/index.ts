@@ -52,9 +52,13 @@ class DenaturalClass implements Callable {
 
     public findMethod(
         name: string,
-    ) {
+    ): any {
         if (this.methods.has(name)) {
             return this.methods.get(name);
+        }
+
+        if (this.superclass) {
+            return this.superclass.findMethod(name);
         }
 
         return null;
