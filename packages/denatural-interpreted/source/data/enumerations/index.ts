@@ -31,4 +31,5 @@ export enum FunctionType {
 export enum ClassType {
     NONE,
     CLASS,
+    SUBCLASS,
 }

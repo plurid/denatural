@@ -257,6 +257,7 @@ class Resolver implements Expression.Visitor<any>, Statement.Visitor<any> {
         }
 
         if (statement.superclass) {
+            this.currentClass = ClassType.SUBCLASS;
             this.resolveExpression(statement.superclass);
         }
 
@@ -305,6 +306,20 @@ class Resolver implements Expression.Visitor<any>, Statement.Visitor<any> {
     public visitSuperExpression(
         expression: Expression.SuperExpression,
     ) {
+        if (this.currentClass === ClassType.NONE) {
+            Denatural.error(
+                expression.keyword,
+                `Cannot use 'super' outside of a class.`,
+            );
+        } else if (
+            this.currentClass !== ClassType.SUBCLASS
+        ) {
+            Denatural.error(
+                expression.keyword,
+                `Cannot use 'super' in a class with no superclass.`,
+            );
+        }
+
         this.resolveLocal(expression, expression.keyword);
 
         return null;
