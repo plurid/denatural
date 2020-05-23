@@ -13,6 +13,7 @@ export interface Visitor<T> {
     visitAssignExpression: (assignExpression: AssignExpression) => T;
     visitBinaryExpression: (binaryExpression: BinaryExpression) => T;
     visitCallExpression: (callExpression: CallExpression) => T;
+    visitGetExpression: (getExpression: GetExpression) => T;
     visitGroupingExpression: (groupingExpression: GroupingExpression) => T;
     visitLiteralExpression: (literalExpression: LiteralExpression) => T;
     visitLogicalExpression: (logicalExpression: LogicalExpression) => T;
@@ -89,6 +90,28 @@ export class CallExpression extends Expression {
         visitor: Visitor<T>,
     ) {
         return visitor.visitCallExpression(this);
+    }
+}
+
+
+export class GetExpression extends Expression {
+    public object: Expression;
+    public name: Token;
+
+    constructor(
+        object: Expression,
+        name: Token,
+    ) {
+        super();
+
+        this.object = object;
+        this.name = name;
+    }
+
+    accept<T>(
+        visitor: Visitor<T>,
+    ) {
+        return visitor.visitGetExpression(this);
     }
 }
 
@@ -224,6 +247,12 @@ export class ASTPrinter implements Visitor<string> {
         callExpression: CallExpression,
     ) {
         return '';
+    }
+
+    public visitGetExpression(
+        getExpression: GetExpression,
+    ) {
+        return getExpression.name.lexeme;
     }
 
     public visitGroupingExpression(
