@@ -219,6 +219,11 @@ class Resolver implements Expression.Visitor<any>, Statement.Visitor<any> {
         this.declare(statement.name);
         this.define(statement.name);
 
+        for (const method of statement.methods) {
+            const declaration = FunctionType.METHOD;
+            this.resolveFunction(method, declaration);
+        }
+
         return null;
     }
 

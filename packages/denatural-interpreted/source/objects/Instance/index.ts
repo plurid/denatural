@@ -23,6 +23,11 @@ class DenaturalInstance {
             return this.fields.get(name.lexeme);
         }
 
+        const method = this.denaturalClass.findMethod(name.lexeme);
+        if (method !== null) {
+            return method;
+        }
+
         throw new RuntimeError(
             name,
             `Undefined property '${name.lexeme}'.`,
