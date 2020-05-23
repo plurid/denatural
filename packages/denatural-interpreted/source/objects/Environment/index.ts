@@ -6,7 +6,7 @@ import {
 
 
 class Environment {
-    private enclosing: Environment | undefined;
+    public enclosing: Environment | undefined;
     private values: Map<string, any> = new Map();
 
     constructor(

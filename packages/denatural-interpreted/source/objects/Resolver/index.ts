@@ -260,6 +260,18 @@ class Resolver implements Expression.Visitor<any>, Statement.Visitor<any> {
             this.resolveExpression(statement.superclass);
         }
 
+        if (statement.superclass) {
+            this.beginScope();
+
+            const lastScopeIndex = this.scopes.length - 1;
+            const scope = this.scopes[lastScopeIndex];
+            scope.set(
+                'super',
+                true,
+            );
+            this.scopes[lastScopeIndex] = new Map(scope);
+        }
+
         this.beginScope();
 
         const lastScopeIndex = this.scopes.length - 1;
@@ -281,7 +293,19 @@ class Resolver implements Expression.Visitor<any>, Statement.Visitor<any> {
 
         this.endScope();
 
+        if (statement.superclass) {
+            this.endScope();
+        }
+
         this.currentClass = enclosingClass;
+
+        return null;
+    }
+
+    public visitSuperExpression(
+        expression: Expression.SuperExpression,
+    ) {
+        this.resolveLocal(expression, expression.keyword);
 
         return null;
     }
