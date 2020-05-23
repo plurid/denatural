@@ -187,6 +187,11 @@ class Interpreter implements Expression.Visitor<any>, Statement.Visitor<any> {
             null,
         );
 
+        if (statement.superclass) {
+            const environment = new Environment(this.environment);
+            environment.define('super', superclass);
+        }
+
         const methods = new Map();
         for (const method of statement.methods) {
             const denaturalFunction = new DenaturalFunction(
@@ -206,6 +211,10 @@ class Interpreter implements Expression.Visitor<any>, Statement.Visitor<any> {
             superclass,
             methods,
         );
+
+        if (superclass && this.environment.enclosing) {
+            this.environment = this.environment.enclosing;
+        }
 
         this.environment.assign(
             statement.name,
@@ -428,6 +437,28 @@ class Interpreter implements Expression.Visitor<any>, Statement.Visitor<any> {
             expression.keyword,
             expression,
         );
+    }
+
+    public visitSuperExpression(
+        expression: Expression.SuperExpression,
+    ) {
+        const distance = this.locals.get(expression);
+
+        if (!distance) {
+            return;
+        }
+
+        const superclass = this.environment.getAt(distance, 'super');
+        const object = this.environment.getAt(distance - 1, 'this');
+        const method = superclass.findMethod(expression.method.lexeme);
+
+        if (!method) {
+            throw new RuntimeError(
+                expression.method,
+                `Undefined property '${expression.method.lexeme}'.`);
+        }
+
+        return method.bind(object);
     }
 
 

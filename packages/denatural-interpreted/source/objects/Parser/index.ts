@@ -474,6 +474,16 @@ class Parser {
 
 
         if (
+            this.match(TokenType.SUPER)
+        ) {
+            const keyword = this.previous();
+            this.consume(TokenType.DOT, `Expect '.' after 'super'.`);
+            const method = this.consume(TokenType.IDENTIFIER, 'Expect superclass method name.');
+            return new Expression.SuperExpression(keyword, method);
+        }
+
+
+        if (
             this.match(TokenType.THIS)
         ) {
             return new Expression.ThisExpression(this.previous());
