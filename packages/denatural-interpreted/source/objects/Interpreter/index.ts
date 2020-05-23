@@ -368,6 +368,25 @@ class Interpreter implements Expression.Visitor<any>, Statement.Visitor<any> {
         );
     }
 
+    public visitSetExpression(
+        expression: Expression.SetExpression,
+    ) {
+        const object = this.evaluate(expression.object);
+
+        if (
+            !(object instanceof DenaturalInstance)
+        ) {
+            throw new RuntimeError(
+                expression.name,
+                'Only instances have fields.',
+            );
+        }
+
+        const value = this.evaluate(expression.value);
+        object.set(expression.name, value);
+        return value;
+    }
+
 
     public executeBlock(
         statements: Statement.Statement[],

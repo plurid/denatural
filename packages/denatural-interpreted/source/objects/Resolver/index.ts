@@ -157,6 +157,14 @@ class Resolver implements Expression.Visitor<any>, Statement.Visitor<any> {
         return null;
     }
 
+    public visitSetExpression(
+        expression: Expression.SetExpression,
+    ) {
+        this.resolveExpression(expression.value);
+        this.resolveExpression(expression.object);
+        return null;
+    }
+
     public visitIfStatement(
         statement: Statement.IfStatement,
     ) {
