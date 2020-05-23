@@ -144,7 +144,7 @@ class Interpreter implements Expression.Visitor<any>, Statement.Visitor<any> {
     public visitFunctionStatement(
         statement: Statement.FunctionStatement,
     ) {
-        const denaturalFunction = new DenaturalFunction(statement, this.environment);
+        const denaturalFunction = new DenaturalFunction(statement, this.environment, false);
 
         this.environment.define(
             statement.name.lexeme,
@@ -175,7 +175,12 @@ class Interpreter implements Expression.Visitor<any>, Statement.Visitor<any> {
 
         const methods = new Map();
         for (const method of statement.methods) {
-            const denaturalFunction = new DenaturalFunction(method, this.environment);
+            const denaturalFunction = new DenaturalFunction(
+                method,
+                this.environment,
+                method.name.lexeme === 'init',
+            );
+
             methods.set(
                 method.name.lexeme,
                 denaturalFunction,
