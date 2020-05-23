@@ -6,6 +6,7 @@ import Denatural from '../Denatural';
 
 import {
     FunctionType,
+    ClassType,
 } from '../../data/enumerations';
 
 
@@ -14,6 +15,7 @@ class Resolver implements Expression.Visitor<any>, Statement.Visitor<any> {
     private interpreter: Interpreter;
     private scopes: Map<string, boolean>[] = [];
     private currentFunction = FunctionType.NONE;
+    private currentClass = ClassType.NONE;
 
     constructor(
         interpeter: Interpreter,
@@ -168,6 +170,14 @@ class Resolver implements Expression.Visitor<any>, Statement.Visitor<any> {
     public visitThisExpression(
         expression: Expression.ThisExpression,
     ) {
+        if (this.currentClass === ClassType.NONE) {
+            Denatural.error(
+                expression.keyword,
+                "Cannot use 'this' outside of a class.",
+            );
+            return null;
+        }
+
         this.resolveLocal(expression, expression.keyword);
         return null;
     }
@@ -223,6 +233,9 @@ class Resolver implements Expression.Visitor<any>, Statement.Visitor<any> {
     public visitClassStatement(
         statement: Statement.ClassStatement,
     ) {
+        const enclosingClass = this.currentClass;
+        this.currentClass = ClassType.CLASS;
+
         this.declare(statement.name);
         this.define(statement.name);
 
@@ -242,6 +255,8 @@ class Resolver implements Expression.Visitor<any>, Statement.Visitor<any> {
         }
 
         this.endScope();
+
+        this.currentClass = enclosingClass;
 
         return null;
     }
