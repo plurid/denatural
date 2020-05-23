@@ -9,6 +9,7 @@ import * as Statement from '../Statement';
 import Token from '../Token';
 import Return from '../Return';
 import DenaturalFunction from '../Function';
+import DenaturalInstance from '../Instance';
 import {
     RuntimeError,
 } from '../Errors';
@@ -350,6 +351,21 @@ class Interpreter implements Expression.Visitor<any>, Statement.Visitor<any> {
         );
 
         return null;
+    }
+
+    public visitGetExpression(
+        expression: Expression.GetExpression,
+    ) {
+        const object = this.evaluate(expression.object);
+
+        if (object instanceof DenaturalInstance) {
+            return object.get(expression.name);
+        }
+
+        throw new RuntimeError(
+            expression.name,
+            'Only instances have properties.',
+        );
     }
 
 

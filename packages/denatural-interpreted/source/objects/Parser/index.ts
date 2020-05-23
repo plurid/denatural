@@ -418,6 +418,11 @@ class Parser {
                 this.match(TokenType.LEFT_PAREN)
             ) {
                 expression = this.finishCall(expression);
+            } else if (
+                this.match(TokenType.DOT)
+            ) {
+                const name = this.consume(TokenType.IDENTIFIER, "Expect property name after '.'.");
+                expression = new Expression.GetExpression(expression, name);
             } else {
                 break;
             }
