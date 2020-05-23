@@ -25,3 +25,9 @@ export enum FunctionType {
     FUNCTION,
     METHOD,
 }
+
+
+export enum ClassType {
+    NONE,
+    CLASS,
+}
