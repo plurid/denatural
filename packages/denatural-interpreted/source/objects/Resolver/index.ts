@@ -198,6 +198,15 @@ class Resolver implements Expression.Visitor<any>, Statement.Visitor<any> {
         return null;
     }
 
+    public visitClassStatement(
+        statement: Statement.ClassStatement,
+    ) {
+        this.declare(statement.name);
+        this.define(statement.name);
+
+        return null;
+    }
+
 
 
     public resolve(

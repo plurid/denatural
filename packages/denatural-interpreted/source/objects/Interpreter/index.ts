@@ -15,6 +15,7 @@ import {
 import {
     Callable,
 } from '../Callable';
+import DenaturalClass from '../Class';
 
 
 
@@ -333,6 +334,22 @@ class Interpreter implements Expression.Visitor<any>, Statement.Visitor<any> {
         }
 
         return callable.call(this, args);
+    }
+
+    public visitClassStatement(
+        statement: Statement.ClassStatement,
+    ) {
+        this.environment.define(
+            statement.name.lexeme,
+            null,
+        );
+        const denaturalClass = new DenaturalClass(statement.name.lexeme);
+        this.environment.assign(
+            statement.name,
+            denaturalClass,
+        );
+
+        return null;
     }
 
 
