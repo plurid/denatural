@@ -1,7 +1,7 @@
 [package]
 name = "denatural"
 version = "0.1.0"
-authors = ["Jan Cavel <caveljan@plurid.com>"]
+authors = ["ly3xqhl8g9 <ly3xqhl8g9@plurid.com>"]
 edition = "2018"
 
 [[bin]]

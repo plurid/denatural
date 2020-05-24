@@ -9,7 +9,7 @@
         "theme": "dark"
     },
     "description": "Syntax highlighting for the denatural programming language (.den and .denatural)",
-    "author": "Jan Cavel <caveljan@plurid.com> (https://plurid.com/)",
+    "author": "ly3xqhl8g9 <ly3xqhl8g9@plurid.com> (https://plurid.com/)",
     "repository": {
         "type": "git",
         "url": "https://github.com/plurid/denatural"
