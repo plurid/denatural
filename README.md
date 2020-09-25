@@ -1,6 +1,7 @@
 <p align="center">
     <img src="https://raw.githubusercontent.com/plurid/denatural/master/about/identity/denatural-logo.png" height="250px">
     <br />
+    <br />
     <a target="_blank" href="https://github.com/plurid/denatural/blob/master/LICENSE">
         <img src="https://img.shields.io/badge/license-MIT-blue.svg?colorB=1380C3&style=for-the-badge" alt="License: MIT">
     </a>
