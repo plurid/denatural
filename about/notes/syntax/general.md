@@ -1,82 +1,142 @@
-desyntaxed language - to let the programmer define the syntax
+# Types
+
++ boolean: `true` and `false`;
++ string: with `'` or `"` or `;
++ number: `integer` (`integer8`, `integer16`, etc.), `real`;
++ undefined;
++ maps: using `{ key: value }`
++ lists: using `[ comma-separated ]`
+
+
+```
+constant aBoolean<boolean> : false
+constant aString<string> : 'a string'
+constant aDefaultNumber<number> : 0
+constant aNumber<number<integer>> : 1
+constant aNumber<number<integer16>> : 2
+constant aNumber<number<real>> : 2.3
+constant undefinedValue<undefined> : undefined
+```
+
+
+The type can be obtained from a variable
+
+```
+constant someNumber<number<integer16>> : 2
+
+// anotherNumber has the type of someNumber, number<integer16>
+constant anotherNumber<someNumber> : 3
+```
+
+
+```
+:       assignment
+
+=       equal to
+!=      not equal to
+>       greater than
+<       less than
+>=      greater than or equal to
+<=      less than or equal to
+```
 
 
 
-to be able to serialize functions? — to be able to generate ASTs from the language and to transfer it across network
+# Variables
+
+```
+// mutable
+let name
+
+// immutable
+constant name
+
+constant |name with spaces|
+```
 
 
 
+# Comments
 
-https://youtu.be/QM1iUe6IofM?t=2538
+```
+// single line
 
-controlled scope sight
-
-    function () {
-        const x = 20
-        const y = 10
-
-        {
-            // x and y are visible
-        }
-
-        use x {
-            // only x is visibile
-        }
-    }
+/* */ multiline
+```
 
 
 
-----
+# Block
 
+```
+<
 
-    constant condition = true
-
-    constant a = if condition
-    <
-        constant b = 20
-        expose b
-    >
-    else
-    <
-        expose c
-    >
-
-
----
-
-
-    compute One ()
-    <
-        constant condition = true
-
-        constant a = if condition
-        <
-            constant b = 20
-            expose b
-
-            if (b > 20)
-            <
-                return true
-            >
-        >
-        else
-        <
-            expose c
-        >
-    >
+>
+```
 
 
 
-----
+# Control Structures
+
+```
+if condition
+<
+    block
+>
+```
+
+```
+if condition
+<
+    // block
+> else
+<
+    // block
+>
+```
+
+```
+if condition
+<
+    // block
+> else if condition
+<
+    // block
+>
+```
 
 
 
-units
+```
+constant a: 1
+constant b: 2
+constant c: 3
 
-    constant metricLength (millimetre) = 5
-    constant metricLength (millimetre) = 5
-    constant metricLengthAmerican (millimeter) = 5
-    constant imperialLength (inch) = 3
+if (a < b and b < c) or c > a
+<
+    // block
+> else if condition
+<
+    // block
+>
+```
 
-    constant sumError = metricLength + imperialLength // compile error
-    constant sum = metricLength + metricLengthAmerican // ??
+
+
+# Maps and Lists
+
+Deon-like
+
+
+```
+constant aMap {
+    key value
+}
+```
+
+```
+constant aList [
+    value1
+    value2
+]
+```
