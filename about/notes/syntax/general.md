@@ -157,3 +157,16 @@ function one <
 
 the context is a deon map containing addresses (?)
 ```
+
+
+
+# Generics
+
+
+```
+function name <
+    generics: A
+> (a: A) {
+
+}
+```
