@@ -140,3 +140,20 @@ constant aList [
     value2
 ]
 ```
+
+
+
+# Distribution
+
+
+```
+function one <
+    // the context of the function
+> (
+    // the parameters of the function
+) {
+    // the body of the function
+}
+
+the context is a deon map containing addresses (?)
+```
