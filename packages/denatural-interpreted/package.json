@@ -1,12 +1,12 @@
 {
     "name": "@plurid/denatural-interpreted",
-    "version": "0.0.0",
+    "version": "0.0.0-0",
     "description": "Denatural",
     "keywords": [
         "denatural"
     ],
     "author": "ly3xqhl8g9 <ly3xqhl8g9@plurid.com> (https://plurid.com)",
-    "license": "MIT",
+    "license": "SEE LICENSE IN LICENSE",
     "repository": {
         "type": "git",
         "url": "https://github.com/plurid/denatural"
@@ -17,14 +17,16 @@
     },
     "homepage": "https://github.com/plurid/denatural/blob/master/packages/denatural-interpreted/README.md",
     "publishConfig": {
+        "registry": "https://registry.npmjs.org/",
         "access": "public"
     },
     "engines": {
-        "node": ">=6.0.0"
+        "node": ">=12",
+        "npm": ">=6"
     },
     "main": "distribution/index.js",
     "module": "distribution/index.es.js",
-    "typings": "distribution/types/index.d.ts",
+    "typings": "distribution/index.d.ts",
     "bin": {
         "denatural": "binder/denatural"
     },
