@@ -1,0 +1,33 @@
+import tokens from #$DENATURAL_PUBLISHER_TOKENS
+
+
+{
+    dependencies [
+        @namespace/package:version
+        some-publisher.com::@namespace/package:version
+        some-publisher.com::@namespace/package:version{myFunction}
+        `some-publisher.com::@namespace/package:version{
+            myOtherFunction,
+        }`
+        some-publisher.com::@namespace/package:version{myFunction}="myAlias"
+        {
+            name @namespace/package:version
+            publisher some-publisher.com
+            token #tokens[some-publisher.com]
+        }
+        {
+            name @namespace/package:version
+            publisher some-publisher.com
+            token #tokens[some-publisher.com]
+            functions [
+                myFunction
+            ]
+            alias myAlias
+        }
+        {
+            name @namespace/package:version
+            publisher some-publisher.com
+            token #!$CI ? #tokens[some-publisher.com] : #$CI_TOKEN
+        }
+    ]
+}
