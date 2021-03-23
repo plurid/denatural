@@ -2,6 +2,8 @@ import tokens from #$DENATURAL_PUBLISHER_TOKENS
 
 
 {
+    package @namespace/package:version
+    publisher some-publisher.com
     dependencies [
         @namespace/package:version
         some-publisher.com::@namespace/package:version
