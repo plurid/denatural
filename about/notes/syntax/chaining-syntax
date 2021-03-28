@@ -1,0 +1,41 @@
+// a language with chaining syntax
+
+// each entity is a vessel
+// vessel-oriented programming
+// what is a vessel? a vessel is that which can hold something
+
+
+a.is(2)
+
+test() {
+    i.is(0)
+
+    3
+        .equals(a) // returns Thenable
+        .then((return) {
+            i.add(1)
+            return(5)
+        }) // returns Elseable
+        .else(() {
+            i.subtract(1)
+        })
+
+    // i is 1
+}
+
+
+
+// a vessel has handles
+
+import Vessel from https...
+
+Vessel.attach(
+    handleName () {
+        return 5
+    }
+)
+
+myVessel.is(Vessel)
+c.is(
+    myVessel.handleName()
+) // 5
