@@ -1,5 +1,7 @@
 <p align="center">
-    <img src="https://raw.githubusercontent.com/plurid/denatural/master/about/identity/denatural-logo.png" height="250px">
+    <a target="_blank" href="https://denatural.plurid.com">
+        <img src="https://raw.githubusercontent.com/plurid/denatural/master/about/identity/denatural-logo.png" height="250px">
+    </a>
     <br />
     <br />
     <a target="_blank" href="https://github.com/plurid/denatural/blob/master/LICENSE">
